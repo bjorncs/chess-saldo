@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:name="Option menu">
+  <item
+  	android:title="Oppdater"
+  	android:id="@+id/update_item"
+  	android:icon="@drawable/ic_menu_refresh">
+  </item>
+  <item
+  	android:title="Innstillinger"
+  	android:id="@+id/settings_item"
+  	android:icon="@drawable/ic_menu_preferences">
+  </item>
+</menu>

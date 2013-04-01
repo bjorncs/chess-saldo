@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  	xmlns:android="http://schemas.android.com/apk/res/android" android:title="@string/prefs_title">
+	<PreferenceCategory android:title="@string/account_info_category">
+		<EditTextPreference android:summary="@string/username_summary" android:title="@string/username" android:key="username" android:inputType="phone" android:singleLine="true" android:defaultValue=""></EditTextPreference>
+		<EditTextPreference android:summary="@string/password_summary" android:title="@string/password" android:key="password" android:inputType="textPassword" android:singleLine="true" android:defaultValue=""></EditTextPreference>
+	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/refresh_time_category">
+		<ListPreference 
+			android:title="@string/update_freq" 
+			android:summary="@string/update_freq_summary"
+			android:key="UPDATE_FREQ_KEY"  
+			android:defaultValue="3600000"
+			android:entries="@array/update_freq_options" 
+			android:entryValues="@array/update_freq_values"> 
+		</ListPreference>
+	</PreferenceCategory>
+</PreferenceScreen>
