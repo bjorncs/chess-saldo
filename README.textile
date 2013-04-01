@@ -6,7 +6,7 @@ Chess Saldo is an Android app which presents saldo information for customers of 
 Works for fixed quota based plan like Chess Play, Chess OnFlex and Chess Sjakk Matt.
 The app is available at "Google Play":https://play.google.com/store/apps/details?id=com.bcseime.android.chess.saldo2
 
-!https://github.com/bjorncs/chess-saldo/raw/master/screenshots/main.png! !https://github.com/bjorncs/chess-saldo/raw/master/screenshots/widget.png! !https://github.com/bjorncs/chess-saldo/raw/master/screenshots/settings.png!
+!https://github.com/bjorncs/chess-saldo/raw/master/screenshots/main-small.png! !https://github.com/bjorncs/chess-saldo/raw/master/screenshots/widget-small.png! !https://github.com/bjorncs/chess-saldo/raw/master/screenshots/settings-small.png!
 
 h2. Running the test cases
 
