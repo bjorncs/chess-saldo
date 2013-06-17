@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
+import com.bcseime.android.chess.saldo2.R;
 import com.chess.saldo.service.entities.Saldo;
 import com.chess.saldo.service.entities.SaldoType;
 

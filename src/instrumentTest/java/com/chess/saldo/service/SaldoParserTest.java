@@ -5,14 +5,13 @@
 package com.chess.saldo.service;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 import android.test.ActivityTestCase;
 
+import com.bcseime.android.chess.saldo2.test.R;
 import com.chess.saldo.service.entities.Saldo;
-import com.chess.saldo.test.R;
 
 /**
  *

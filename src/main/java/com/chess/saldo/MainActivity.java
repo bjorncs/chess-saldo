@@ -1,20 +1,16 @@
 package com.chess.saldo;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.*;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.chess.saldo.service.ChessSaldoService;
+import com.bcseime.android.chess.saldo2.R;
 import com.chess.saldo.service.entities.Saldo;
 import com.chess.saldo.service.entities.SaldoType;
 

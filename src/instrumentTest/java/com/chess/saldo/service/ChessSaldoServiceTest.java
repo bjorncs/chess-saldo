@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import com.bcseime.android.chess.saldo2.test.R;
 import com.chess.saldo.service.entities.Saldo;
-import com.chess.saldo.test.R;
 import junit.framework.Assert;
 import android.test.ActivityTestCase;
 
@@ -31,7 +31,7 @@ public class ChessSaldoServiceTest extends ActivityTestCase {
 			password = p.getProperty("password");
 			if (username == null || password == null) {
 				throw new IllegalStateException(
-						"Username and/or password is not set in src/test/java/resources/user_credentials.properties");
+						"Username and/or password is not set in src/instrumentTest/java/res/raw/user_credentials.properties");
 			}
 		} finally {
 			if (in != null) {
