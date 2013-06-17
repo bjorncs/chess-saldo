@@ -1,19 +1,19 @@
 # built application files
 *.apk
-*.ap_
-
-# files for the dex VM
-*.dex
-
-# Java class files
-*.class
-
-# generated files
-bin/
-gen/
-
-# Local configuration file (sdk path, etc)
-local.properties
 
 # Nasty OSX file
 .DS_Store
+
+# Keystore
+keystore
+
+# Gradle
+.gradle/
+build/
+gradle.properties
+
+# IntelliJ IDEA
+.idea/
+chess-saldo.iml
+
+

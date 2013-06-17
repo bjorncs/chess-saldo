@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<style name="WidgetInnerSlotLayout">
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:orientation">vertical</item>
+        <item name="android:paddingBottom">1dp</item>
+        <item name="android:paddingTop">1dp</item>
+	</style>
+	<style name="WidgetSaldoTextView" parent="@android:style/Widget.TextView">
+		<item name="android:textColor">@android:color/white</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:textSize">18dp</item>
+		<item name="android:gravity">center</item>
+		<item name="android:text">150</item>
+	</style>
+	<style name="WidgetSaldoTypeTextView" parent="@style/WidgetSaldoTextView">
+		<item name="android:textSize">11dp</item>
+	</style>
+
+</resources>

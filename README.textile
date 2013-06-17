@@ -6,14 +6,18 @@ Chess Saldo is an Android app which presents saldo information for customers of 
 Works for fixed quota based plan like Chess Play, Chess OnFlex and Chess Sjakk Matt.
 The app is available at "Google Play":https://play.google.com/store/apps/details?id=com.bcseime.android.chess.saldo2
 
+The project uses Android's new "Gradle based build system":http://tools.android.com/tech-docs/new-build-system
+
 !https://github.com/bjorncs/chess-saldo/raw/master/screenshots/main-small.png! !https://github.com/bjorncs/chess-saldo/raw/master/screenshots/widget-small.png! !https://github.com/bjorncs/chess-saldo/raw/master/screenshots/settings-small.png!
 
 h2. Running the test cases
 
-You have to add your Chess login credentials to <code>tests/ChessSaldoTest/res/raw/user_credentials.properties</code> to run some of the test cases. Example:
+You have to add your Chess login credentials to <code>src/instrumentTest/res/raw/user_credentials.properties</code> to run some of the test cases. Example:
 <pre lang="INI"><code>
 username=98765432
 password=pwd
 </code></pre>
+
+Then execute "gradle connectedInstrumentTest" in your favourite terminal to execute the tests on your Android device.
 
 Feel free to send a pull request if you want to contribute.
