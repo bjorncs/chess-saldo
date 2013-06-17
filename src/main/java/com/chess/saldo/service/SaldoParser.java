@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.chess.saldo.service;
 
 import com.chess.saldo.service.ServiceException.Type;
@@ -10,10 +6,6 @@ import com.chess.saldo.service.entities.Saldo;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- *
- * @author Bjorncs
- */
 public class SaldoParser {
 
     public static Saldo parsePage(String text) throws ServiceException {

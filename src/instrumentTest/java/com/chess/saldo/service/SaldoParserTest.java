@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.chess.saldo.service;
 
 import java.io.BufferedReader;
@@ -13,10 +9,6 @@ import android.test.ActivityTestCase;
 import com.bcseime.android.chess.saldo2.test.R;
 import com.chess.saldo.service.entities.Saldo;
 
-/**
- *
- * @author Bjorncs
- */
 public class SaldoParserTest extends ActivityTestCase {
 
     public void testParsingMinSide() throws IOException, ServiceException {
