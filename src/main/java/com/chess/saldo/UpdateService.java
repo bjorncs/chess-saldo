@@ -62,7 +62,7 @@ public class UpdateService extends IntentService {
         } catch (Exception e) {
             Log.w("CHESS_SALDO", e.toString());
             if (showToast) {
-                postToast("Chess Saldo:\n" + e.getClass().getSimpleName() + ": " + e.getMessage());
+                postToast("Chess Saldo:\n" + e.getMessage());
             }
         }
     }

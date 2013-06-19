@@ -5,5 +5,6 @@
   android:updatePeriodMillis="0"
   android:minWidth="272dp"
   android:minHeight="56dp"
-  android:configure="com.chess.saldo.WidgetConfigureActivity">
+  android:configure="com.chess.saldo.WidgetConfigureActivity"
+  android:previewImage="@drawable/preview_large">
 </appwidget-provider>

@@ -59,7 +59,7 @@ public class WidgetConfigureActivity extends Activity {
     }
 
     private boolean isSmallWidget() {
-            AppWidgetManager mgr = AppWidgetManager.getInstance(this);
+        AppWidgetManager mgr = AppWidgetManager.getInstance(this);
         AppWidgetProviderInfo info = mgr.getAppWidgetInfo(mAppWidgetId);
         return info.provider.compareTo(new ComponentName(this, WidgetProviders.Small.class)) == 0;
     }

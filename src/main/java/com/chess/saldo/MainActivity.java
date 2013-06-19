@@ -18,28 +18,26 @@ public class MainActivity extends Activity {
 
     private UpdateCompleteBroadcastReceiver receiver;
 
-    //TODO: Add widget previews
+    private SettingsManager settings;
 
-	private SettingsManager settings;
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		this.settings = new SettingsManager(getApplicationContext());
-		setContentView(R.layout.main_layout);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.settings = new SettingsManager(getApplicationContext());
+        setContentView(R.layout.main_layout);
         if (!settings.isUserCredentialsSet()) {
             showPreferenceActivity();
         }
-	}
-	
-	@Override
-	protected void onResume() {
-		super.onResume();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         IntentFilter filter = new IntentFilter(UpdateService.UPDATE_COMPLETE_ACTION);
         receiver = new UpdateCompleteBroadcastReceiver();
         registerReceiver(receiver, filter);
-		updateUI();
-	}
+        updateUI();
+    }
 
     @Override
     public void onPause() {
@@ -47,43 +45,43 @@ public class MainActivity extends Activity {
         super.onPause();
     }
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		MenuInflater menuInflater = getMenuInflater();
-		menuInflater.inflate(R.menu.main_menu, menu);
-		return true;
-	}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
 
-	@Override
-	protected void onStart() {
-		super.onStart();
-	}
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		super.onOptionsItemSelected(item);
-		switch (item.getItemId()) {
-			case R.id.settings_item:
-				showPreferenceActivity();
-				return true;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case R.id.settings_item:
+                showPreferenceActivity();
+                return true;
 
-			case R.id.update_item:
-				Intent intent = new Intent(this, UpdateService.class);
+            case R.id.update_item:
+                Intent intent = new Intent(this, UpdateService.class);
                 intent.putExtra(UpdateService.SHOW_TOAST, true);
                 startService(intent);
-				return true;
-				
-		}
-		return false;
-	}
-	
-	private void showPreferenceActivity() {
-		Intent intent = new Intent(this, SettingsActivity.class);
-		startActivity(intent);
-	}
-	
-	private void updateUI() {
+                return true;
+
+        }
+        return false;
+    }
+
+    private void showPreferenceActivity() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    private void updateUI() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -96,22 +94,22 @@ public class MainActivity extends Activity {
                 updateSaldoItem(R.id.main_panel_sms, R.id.smsValue, R.id.smsProgress, saldo.smsLeft, saldo.smsTotal, SaldoType.SMS.widgetName);
             }
         });
-	}
-	
-	private void updateSaldoItem(int panelId, int textViewId, int progressBarId, int progressValue, int progressMax, String unit) {
+    }
+
+    private void updateSaldoItem(int panelId, int textViewId, int progressBarId, int progressValue, int progressMax, String unit) {
         ViewGroup panel = (ViewGroup) findViewById(panelId);
 
-		if (progressValue == -1 || progressMax == -1) {
+        if (progressValue == -1 || progressMax == -1) {
             panel.setVisibility(View.GONE);
-		} else {
+        } else {
             TextView textView = (TextView) findViewById(textViewId);
             ProgressBar progressBar = (ProgressBar) findViewById(progressBarId);
             panel.setVisibility(View.VISIBLE);
             progressBar.setMax(progressMax);
             progressBar.setProgress(progressValue);
-			textView.setText(String.format("%d av %d %s", progressValue, progressMax, unit));
-		}
-	}
+            textView.setText(String.format("%d av %d %s", progressValue, progressMax, unit));
+        }
+    }
 
     private class UpdateCompleteBroadcastReceiver extends BroadcastReceiver {
 

@@ -117,7 +117,7 @@ public abstract class WidgetProviders extends AppWidgetProvider {
     public static boolean hasWidgets(Context context) {
         AppWidgetManager manager = AppWidgetManager.getInstance(context);
         return manager.getAppWidgetIds(new ComponentName(context, Large.class)).length > 0 ||
-               manager.getAppWidgetIds(new ComponentName(context, Small.class)).length > 0;
+                manager.getAppWidgetIds(new ComponentName(context, Small.class)).length > 0;
     }
 
     protected abstract RemoteViews getUpdatedRemoteView(Context context, int widgetId);

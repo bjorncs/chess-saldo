@@ -69,7 +69,7 @@ public class ConnectivityBroadcastReceiver extends BroadcastReceiver {
         boolean result = widgetEnabled && difference >= updateFreq;
         Log.d("CHESS_SALDO",
                 String.format("ShouldUpdate() = %b (difference=%d, updateFreq=%d, widgetEnabled=%b)",
-                result, difference, updateFreq, widgetEnabled));
+                        result, difference, updateFreq, widgetEnabled));
         return result;
     }
 
