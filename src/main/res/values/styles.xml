@@ -8,6 +8,11 @@
 		<item name="android:progress">50</item>
 		<item name="android:layout_alignParentBottom">true</item>
 	</style>
+
+    <style name="WidgetProgressBarContainer">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">fill_parent</item>
+    </style>
 	<style name="WidgetDivider">
 		<item name="android:layout_width">1dp</item>
 		<item name="android:layout_height">match_parent</item>

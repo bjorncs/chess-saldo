@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.bcseime.android.chess.saldo2"
-	android:versionName="2.01"
-	android:versionCode="17">
+	android:versionName="2.02"
+	android:versionCode="18">
 	<uses-sdk android:minSdkVersion="7" android:targetSdkVersion="17" />
 	<uses-permission android:name="android.permission.INTERNET"/>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>

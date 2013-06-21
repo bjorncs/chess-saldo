@@ -29,13 +29,13 @@ public class Saldo {
     public int getProgressFor(SaldoType type) {
         switch (type) {
             case DATA:
-                return (int) dataLeft;
+                return Math.round(dataLeft);
             case MINUTES:
                 return minutesLeft;
             case MMS:
                 return mmsLeft;
             case MONEY:
-                return (int)moneyUsed;
+                return Math.round(moneyUsed);
             case SMS:
                 return smsLeft;
             default:
@@ -46,13 +46,13 @@ public class Saldo {
     public int getMaxFor(SaldoType type) {
         switch (type) {
             case DATA:
-                return (int) dataTotal;
+                return Math.round(dataTotal);
             case MINUTES:
                 return minutesTotal;
             case MMS:
                 return mmsTotal;
             case MONEY:
-                return (int) moneyUsed;
+                return Math.round(moneyUsed);
             case SMS:
                 return smsTotal;
             default:

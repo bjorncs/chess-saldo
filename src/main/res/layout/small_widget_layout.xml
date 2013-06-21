@@ -14,6 +14,7 @@
         <TextView style="@style/WidgetSaldoTextView" android:id="@+id/lblSaldoValue"/>
         <TextView style="@style/WidgetSaldoTypeTextView" android:text="KR" android:id="@+id/lblSaldoType"/>
     </LinearLayout>
-    <ProgressBar style="@android:style/Widget.ProgressBar.Horizontal" android:max="100" android:progress="50" android:layout_height="6dp" android:layout_width="fill_parent" android:id="@+id/pgrSaldo" android:progressDrawable="@drawable/blueprogress" />
-
+    <FrameLayout style="@style/WidgetProgressBarContainer" android:id="@+id/pgrSaldoContainer">
+        <ProgressBar style="@android:style/Widget.ProgressBar.Horizontal" android:max="100" android:progress="50" android:layout_height="6dp" android:layout_width="fill_parent" android:id="@+id/pgrSaldo" android:progressDrawable="@drawable/blueprogress" />
+    </FrameLayout>
 </LinearLayout>
