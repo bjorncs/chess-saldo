@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider
-  xmlns:android="http://schemas.android.com/apk/res/android" 
-  android:initialLayout="@layout/large_widget_layout"
-  android:updatePeriodMillis="0"
-  android:minWidth="272dp"
-  android:minHeight="56dp"
-  android:configure="com.chess.saldo.WidgetConfigureActivity"
-  android:previewImage="@drawable/preview_large">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:initialLayout="@layout/large_widget_layout"
+        android:updatePeriodMillis="0"
+        android:minWidth="272dp"
+        android:minHeight="56dp"
+        android:resizeMode="horizontal"
+        android:minResizeWidth="136dp"
+        android:configure="com.chess.saldo.WidgetConfigureActivity"
+        android:previewImage="@drawable/preview_large">
 </appwidget-provider>

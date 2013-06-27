@@ -3,8 +3,7 @@ h1. Chess Saldo
 h2. Intro
 
 Chess Saldo is an Android app which presents saldo information for customers of the Norwegian mobile operator Chess.
-Works for fixed quota based plan like Chess Play, Chess OnFlex and Chess Sjakk Matt.
-The app is available at "Google Play":https://play.google.com/store/apps/details?id=com.bcseime.android.chess.saldo2.
+Works for fixed quota based plan like Chess Sjakk Matt. The app is available at "Google Play":https://play.google.com/store/apps/details?id=com.bcseime.android.chess.saldo2.
 
 The project uses the new build system for Android based on "Gradle":http://tools.android.com/tech-docs/new-build-system.
 
