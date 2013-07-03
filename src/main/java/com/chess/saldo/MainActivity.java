@@ -88,7 +88,7 @@ public class MainActivity extends Activity {
                 Saldo saldo = settings.getSaldo();
                 TextView cashTextView = (TextView) findViewById(R.id.cashValue);
                 cashTextView.setText(saldo.strMoneyUsed);
-                updateSaldoItem(R.id.main_panel_data, R.id.dataValue, R.id.dataProgress, (int) saldo.dataLeft, (int) saldo.dataTotal, SaldoType.DATA.widgetName);
+                updateSaldoItem(R.id.main_panel_data, R.id.dataValue, R.id.dataProgress, Math.round(saldo.dataLeft), Math.round(saldo.dataTotal), SaldoType.DATA.widgetName);
                 updateSaldoItem(R.id.main_panel_minutes, R.id.minutesValue, R.id.minutesProgress, saldo.minutesLeft, saldo.minutesTotal, SaldoType.MINUTES.widgetName);
                 updateSaldoItem(R.id.main_panel_mms, R.id.mmsValue, R.id.mmsProgress, saldo.mmsLeft, saldo.mmsTotal, SaldoType.MMS.widgetName);
                 updateSaldoItem(R.id.main_panel_sms, R.id.smsValue, R.id.smsProgress, saldo.smsLeft, saldo.smsTotal, SaldoType.SMS.widgetName);

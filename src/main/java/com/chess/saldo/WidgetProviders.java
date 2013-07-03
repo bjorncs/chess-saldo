@@ -85,7 +85,7 @@ public abstract class WidgetProviders extends AppWidgetProvider {
                     remoteViews.setViewVisibility(R.id.pgrSaldoContainer, View.INVISIBLE);
                 } else {
                     remoteViews.setViewVisibility(R.id.pgrSaldo, View.VISIBLE);
-                    remoteViews.setProgressBar(R.id.pgrSaldo, progress, max, false);
+                    remoteViews.setProgressBar(R.id.pgrSaldo, max, progress, false);
                 }
             }
 
