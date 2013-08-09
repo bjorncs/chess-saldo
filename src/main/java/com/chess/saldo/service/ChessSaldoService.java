@@ -27,8 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChessSaldoService {
-    private static final int CONN_TIMEOUT = 6 * 1000;
-    private static final int SOCKET_TIMEOUT = 20 * 1000;
+    private static final int CONN_TIMEOUT = 14 * 1000;
+    private static final int SOCKET_TIMEOUT = 24 * 1000;
 
 
     private String username;

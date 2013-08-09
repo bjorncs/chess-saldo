@@ -10,9 +10,6 @@ import android.net.NetworkInfo;
 import android.os.SystemClock;
 import android.util.Log;
 
-/**
- * Created by bjorncs on 08.06.13.
- */
 public class ConnectivityBroadcastReceiver extends BroadcastReceiver {
 
     private volatile static PendingIntent alarmIntent;

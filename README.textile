@@ -12,10 +12,10 @@ The project uses the new build system for Android based on "Gradle":http://tools
 h2. Dependencies
 
 You need to have the following tools/SDK installed:
-* Android SDK 4.2.2 (API 17)
-* Android Build-tools 17
+* Android SDK 4.3 (API 18)
+* Android Build-tools 18.0.1
 
-Local installation of Gradle 1.6 is recommended. Use the bundled gradle wrapper script (@gradlew@) if no Gradle 1.6 installation is present. @gradlew.bat@ is the equivalent Windows version.
+Local installation of Gradle 1.7 is recommended. Use the bundled gradle wrapper script (@gradlew@) if no Gradle 1.7 installation is present. @gradlew.bat@ is the equivalent Windows version.
 
 h2. Building
 
