@@ -18,6 +18,8 @@ public class UpdateService extends IntentService {
     public static final String SHOW_TOAST = "com.chess.saldo.SHOW_TOAST";
 
     private Handler handler;
+    private SettingsManager settings;
+    private ChessSaldoService service;
 
     public UpdateService() {
         super("ChessSaldoUpdateService");
@@ -27,11 +29,12 @@ public class UpdateService extends IntentService {
     public void onCreate() {
         super.onCreate();
         handler = new Handler();
+        settings = new SettingsManager(this);
+        service = new ChessSaldoService(settings.getUsername(), settings.getPassword());
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        SettingsManager settings = new SettingsManager(this);
         Log.d("CHESS_SALDO", "Update service was invoked by intent.");
         boolean showToast = intent.getBooleanExtra(SHOW_TOAST, false);
 
@@ -45,12 +48,11 @@ public class UpdateService extends IntentService {
             postToast("Chess Saldo: Oppdaterer saldo...");
         }
         try {
-            ChessSaldoService service = new ChessSaldoService(settings.getUsername(), settings.getPassword());
+            service.setUsername(settings.getUsername());
+            service.setPassword(settings.getPassword());
             Saldo saldo = service.fetchSaldo();
             settings.setSaldo(saldo);
-            Log.d("CHESS_SALDO", String.format("Saldo info updated: data=%f/%f, minutes=%d/%d, mms=%d/%d, sms=%d/%d",
-                    saldo.dataLeft, saldo.dataTotal, saldo.minutesLeft, saldo.minutesTotal,
-                    saldo.mmsLeft, saldo.mmsTotal, saldo.smsLeft, saldo.smsTotal));
+            Log.d("CHESS_SALDO", String.format("Saldo info updated: %s", saldo.toString()));
             WidgetProviders.updateAllWidgets(getApplicationContext());
 
             if (showToast) {

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 import com.bcseime.android.chess.saldo2.R;
 import com.chess.saldo.service.entities.Saldo;
+import com.chess.saldo.service.entities.SaldoItem;
 import com.chess.saldo.service.entities.SaldoType;
 
 import java.util.Arrays;
@@ -25,35 +26,21 @@ public abstract class WidgetProviders extends AppWidgetProvider {
         private static RemoteViews updateWidgetView(Context context) {
             Saldo saldo = new SettingsManager(context).getSaldo();
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.large_widget_layout);
-            updateSaldoItem(views, R.id.dataProgress, R.id.dataProgressContainer, R.id.dataValue, Math.round(saldo.dataLeft), Math.round(saldo.dataTotal));
-            updateSaldoItem(views, R.id.minutesProgress, R.id.minutesProgressContainer, R.id.minutesValue, saldo.minutesLeft, saldo.minutesTotal);
-            updateSaldoItem(views, R.id.mmsProgress, R.id.mmsProgressContainer, R.id.mmsValue, saldo.mmsLeft, saldo.mmsTotal);
-            updateSaldoItem(views, R.id.smsProgress, R.id.smsProgressContainer, R.id.smsValue, saldo.smsLeft, saldo.smsTotal);
+            updateSaldoItem(views, R.id.dataProgress, R.id.dataProgressContainer, R.id.dataValue, saldo, SaldoType.DATA);
+            updateSaldoItem(views, R.id.minutesProgress, R.id.minutesProgressContainer, R.id.minutesValue, saldo, SaldoType.MINUTES);
+            updateSaldoItem(views, R.id.mmsProgress, R.id.mmsProgressContainer, R.id.mmsValue, saldo, SaldoType.MMS);
+            updateSaldoItem(views, R.id.smsProgress, R.id.smsProgressContainer, R.id.smsValue, saldo, SaldoType.SMS);
 
             Log.d("CHESS_SALDO", "Widget views updated with saldo information");
-            if (saldo.moneyUsed == -1) {
+            if (saldo.moneyUsed.isEmpty()) {
                 views.setTextViewText(R.id.cashValue, "-");
             } else {
-                views.setTextViewText(R.id.cashValue, Integer.toString(Math.round(saldo.moneyUsed)));
+                views.setTextViewText(R.id.cashValue, Integer.toString(saldo.parseMoneyUsed()));
             }
             Intent i = new Intent(context.getApplicationContext(), MainActivity.class);
             PendingIntent updateServiceIntent = PendingIntent.getActivity(context.getApplicationContext(), 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
             views.setOnClickPendingIntent(R.id.widget_layout, updateServiceIntent);
             return views;
-        }
-
-
-        private static void updateSaldoItem(RemoteViews remoteViews, int progressId, int progressContainerId, int textId, int progressValue, int progressMax) {
-            if (progressValue == -1 || progressMax == -1) {
-                remoteViews.setTextViewText(textId, "-");
-                // Workaround for issue 11040 (https://code.google.com/p/android/issues/detail?id=11040)
-                remoteViews.setViewVisibility(progressContainerId, View.INVISIBLE);
-            } else {
-                remoteViews.setTextViewText(textId, Integer.toString(progressValue));
-                // Workaround for issue 11040 (https://code.google.com/p/android/issues/detail?id=11040)
-                remoteViews.setViewVisibility(progressContainerId, View.VISIBLE);
-                remoteViews.setProgressBar(progressId, progressMax, progressValue, false);
-            }
         }
 
         @Override
@@ -70,23 +57,13 @@ public abstract class WidgetProviders extends AppWidgetProvider {
             SettingsManager settings = new SettingsManager(context);
             Saldo saldo = settings.getSaldo();
             SaldoType type = settings.getWidgetType(widgetId);
-            int progress = saldo.getProgressFor(type);
-            int max = saldo.getMaxFor(type);
 
-            remoteViews.setTextViewText(R.id.lblSaldoType, type.widgetName);
-            if (progress == -1) {
-                remoteViews.setTextViewText(R.id.lblSaldoValue, "-");
-                // Workaround for issue 11040 (https://code.google.com/p/android/issues/detail?id=11040)
+            remoteViews.setTextViewText(R.id.lblSaldoType, type.unitSuffix);
+            if (type == SaldoType.MONEY) {
+                remoteViews.setTextViewText(R.id.lblSaldoValue, Integer.toString(saldo.parseMoneyUsed()));
                 remoteViews.setViewVisibility(R.id.pgrSaldoContainer, View.INVISIBLE);
             } else {
-                remoteViews.setTextViewText(R.id.lblSaldoValue, Integer.toString(progress));
-                if (type == SaldoType.MONEY) {
-                    // Workaround for issue 11040 (https://code.google.com/p/android/issues/detail?id=11040)
-                    remoteViews.setViewVisibility(R.id.pgrSaldoContainer, View.INVISIBLE);
-                } else {
-                    remoteViews.setViewVisibility(R.id.pgrSaldoContainer, View.VISIBLE);
-                    remoteViews.setProgressBar(R.id.pgrSaldo, max, progress, false);
-                }
+                updateSaldoItem(remoteViews, R.id.pgrSaldo, R.id.pgrSaldoContainer, R.id.lblSaldoValue, saldo, type);
             }
 
             Intent i = new Intent(context.getApplicationContext(), MainActivity.class);
@@ -98,6 +75,24 @@ public abstract class WidgetProviders extends AppWidgetProvider {
         @Override
         protected RemoteViews getUpdatedRemoteView(Context context, int widgetId) {
             return updateWidgetView(context, widgetId);
+        }
+    }
+
+    // Progress bar containter is workaround for issue 11040 (https://code.google.com/p/android/issues/detail?id=11040)
+    private static void updateSaldoItem(RemoteViews remoteViews, int progressId, int progressContainerId, int textId, Saldo saldo, SaldoType type) {
+        if (saldo.items.containsKey(type)) {
+            SaldoItem item = saldo.items.get(type);
+            if (item.isUnlimited()) {
+                remoteViews.setTextViewText(textId, "\u221E");
+                remoteViews.setViewVisibility(progressContainerId, View.INVISIBLE);
+            } else {
+                remoteViews.setTextViewText(textId, Integer.toString(item.balance));
+                remoteViews.setViewVisibility(progressContainerId, View.VISIBLE);
+                remoteViews.setProgressBar(progressId, item.total, item.balance, false);
+            }
+        } else {
+            remoteViews.setTextViewText(textId, "-");
+            remoteViews.setViewVisibility(progressContainerId, View.INVISIBLE);
         }
     }
 

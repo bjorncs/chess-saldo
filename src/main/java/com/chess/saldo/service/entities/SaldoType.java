@@ -4,18 +4,20 @@ package com.chess.saldo.service.entities;
  * Created by bjorncs on 10.06.13.
  */
 public enum SaldoType {
-    MONEY("Forbruk", "KR"),
-    SMS("SMS", "SMS"),
-    MMS("MMS", "MMS"),
-    MINUTES("Minutter", "MIN"),
-    DATA("Data", "MB");
+    MONEY("Forbruk", "Money", "KR"),
+    SMS("SMS", "SMS", "SMS"),
+    MMS("MMS", "MMS", "MMS"),
+    MINUTES("Minutter", "CallTime", "MIN"),
+    DATA("Data", "GPRS", "MB");
 
     public final String prettyName;
-    public final String widgetName;
+    public final String apiName;
+    public final String unitSuffix;
 
-    SaldoType(String prettyName, String widgetName) {
+    SaldoType(String prettyName, String apiName, String unitSuffix) {
         this.prettyName = prettyName;
-        this.widgetName = widgetName;
+        this.apiName = apiName;
+        this.unitSuffix = unitSuffix;
     }
 
     public static String[] prettyNames() {
@@ -26,15 +28,14 @@ public enum SaldoType {
         return names;
     }
 
-    public static String[] widgetName() {
-        String[] names = new String[values().length];
-        for (int i = 0; i < values().length; i++) {
-            names[i] = values()[i].widgetName;
+    public static SaldoType fromString(String name) {
+        for (SaldoType value : values()) {
+            if (value.apiName.equals(name)) return value;
         }
-        return names;
+        throw new IllegalArgumentException("Invalid saldo type: " + name);
     }
 
-    public static SaldoType fromString(String name) {
+    public static SaldoType fromPrettyString(String name) {
         for (SaldoType value : values()) {
             if (value.prettyName.equals(name)) return value;
         }

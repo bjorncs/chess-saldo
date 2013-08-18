@@ -4,6 +4,7 @@ import com.chess.saldo.service.entities.Saldo;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
@@ -43,11 +44,10 @@ public class ChessSaldoService {
 
     public ChessSaldoService() {
         this.client = createHttpClient();
-        client.setRedirectHandler(new EnhancedRedirectHandler());
     }
 
     public synchronized Saldo fetchSaldo() throws IOException, ServiceException {
-        HttpPost request = createRequest();
+        HttpGet request = createRequest();
         HttpResponse response = client.execute(request);
 
         return parseResponse(response);
@@ -59,22 +59,17 @@ public class ChessSaldoService {
         return SaldoParser.parsePage(htmlText);
     }
 
-    private HttpPost createRequest() {
-        try {
-            HttpPost httpPost = new HttpPost("https://www.chess.no/");
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("c_", "CHS_MyPageController"));
-            params.add(new BasicNameValuePair("m_", "submitMyPageForm"));
-            params.add(new BasicNameValuePair("submitLogin", "Logg+inn"));
-            params.add(new BasicNameValuePair("cid", "403"));
-            params.add(new BasicNameValuePair("username", username));
-            params.add(new BasicNameValuePair("password", password));
-            UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, HTTP.UTF_8);
-            httpPost.setEntity(entity);
-            return httpPost;
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+    private HttpGet createRequest() {
+        HttpGet httpGet = new HttpGet("https://217.68.103.239/mobile/mobile.asmx/GetUsageSaldo");
+        httpGet.setHeader("username", username);
+        httpGet.setHeader("User-Agent", "");
+        httpGet.setHeader("password", password);
+        httpGet.setHeader("Content-Type", "application/json; charset=utf-8");
+        httpGet.setHeader("X-Requested-With", "XMLHttpRequest");
+        httpGet.setHeader("locale", "nb-NO");
+        httpGet.setHeader("Host", "minside.chess.no");
+        httpGet.setHeader("Connection", "close");
+        return httpGet;
     }
 
     public String getUsername() {
@@ -110,24 +105,10 @@ public class ChessSaldoService {
             HttpConnectionParams.setSoTimeout(basicHttpParams, SOCKET_TIMEOUT);
 
             ClientConnectionManager ccm = new ThreadSafeClientConnManager(basicHttpParams, registry);
+
             return new DefaultHttpClient(ccm, basicHttpParams);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
-        }
-    }
-
-    private class EnhancedRedirectHandler extends DefaultRedirectHandler {
-
-        @Override
-        public boolean isRedirectRequested(HttpResponse response, HttpContext context) {
-            boolean isRedirect = super.isRedirectRequested(response, context);
-            if (!isRedirect) {
-                int responseCode = response.getStatusLine().getStatusCode();
-                if (responseCode == 301 || responseCode == 302) {
-                    return true;
-                }
-            }
-            return isRedirect;
         }
     }
 

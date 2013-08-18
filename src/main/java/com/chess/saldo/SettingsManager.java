@@ -6,6 +6,7 @@ import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
 import com.chess.saldo.service.entities.Saldo;
+import com.chess.saldo.service.entities.SaldoItem;
 import com.chess.saldo.service.entities.SaldoType;
 
 public class SettingsManager {
@@ -25,39 +26,32 @@ public class SettingsManager {
     }
 
     public Saldo getSaldo() {
-        int smsTotal = prefs.getInt("saldo.smsTotal", -1);
-        int smsLeft = prefs.getInt("saldo.smsLeft", -1);
-        int mmsTotal = prefs.getInt("saldo.mmsTotal", -1);
-        int mmsLeft = prefs.getInt("saldo.mmsLeft", -1);
-        int minutesTotal = prefs.getInt("saldo.minutesTotal", -1);
-        int minutesLeft = prefs.getInt("saldo.minutesLeft", -1);
-        float dataTotal = prefs.getFloat("saldo.dataTotal", -1);
-        float dataLeft = prefs.getFloat("saldo.dataLeft", -1);
-        float moneyUsed = prefs.getFloat("saldo.moneyUsed", -1);
-        String strMoneyUsed = prefs.getString("saldo.strMoneyUsed", "");
-
-        Saldo saldo = new Saldo(
-                smsTotal, smsLeft,
-                mmsTotal, mmsLeft,
-                minutesTotal, minutesLeft,
-                dataTotal, dataLeft,
-                moneyUsed, strMoneyUsed);
+        String money = prefs.getString("saldo.money", "");
+        Saldo saldo = new Saldo(money);
+        for (SaldoType type : SaldoType.values()) {
+            if (prefs.getBoolean("saldo."+type.apiName, true)) {
+                int balance = prefs.getInt("saldo."+type.apiName+".balance", 0);
+                int total = prefs.getInt("saldo."+type.apiName+".total", 0);
+                saldo.items.put(type, new SaldoItem(balance, total, type));
+            }
+        }
         return saldo;
     }
 
     public void setSaldo(Saldo saldo) {
         updateLastUpdate();
         Editor editor = prefs.edit();
-        editor.putInt("saldo.smsTotal", saldo.smsTotal);
-        editor.putInt("saldo.smsLeft", saldo.smsLeft);
-        editor.putInt("saldo.mmsTotal", saldo.mmsTotal);
-        editor.putInt("saldo.mmsLeft", saldo.mmsLeft);
-        editor.putInt("saldo.minutesTotal", saldo.minutesTotal);
-        editor.putInt("saldo.minutesLeft", saldo.minutesLeft);
-        editor.putFloat("saldo.dataTotal", saldo.dataTotal);
-        editor.putFloat("saldo.dataLeft", saldo.dataLeft);
-        editor.putFloat("saldo.moneyUsed", saldo.moneyUsed);
-        editor.putString("saldo.strMoneyUsed", saldo.strMoneyUsed);
+        editor.putString("saldo.money", saldo.moneyUsed);
+        // Remove all saldo items
+        for (SaldoType type : SaldoType.values()) {
+            editor.putBoolean("saldo."+type.apiName, false);
+        }
+        // Add all saldo items from saldo object
+        for (SaldoItem item : saldo.items.values()) {
+            editor.putBoolean("saldo."+item.type.apiName, true);
+            editor.putInt("saldo."+item.type.apiName+".balance", item.balance);
+            editor.putInt("saldo."+item.type.apiName+".total", item.total);
+        }
         editor.commit();
     }
 
@@ -82,7 +76,7 @@ public class SettingsManager {
     }
 
     public SaldoType getWidgetType(int widgetId) {
-        return SaldoType.fromString(prefs.getString("widget." + widgetId + ".type", SaldoType.MONEY.prettyName));
+        return SaldoType.fromPrettyString(prefs.getString("widget." + widgetId + ".type", SaldoType.MONEY.prettyName));
     }
 
     private void updateLastUpdate() {

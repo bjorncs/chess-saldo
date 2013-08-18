@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.bcseime.android.chess.saldo2.R;
 import com.chess.saldo.service.entities.Saldo;
+import com.chess.saldo.service.entities.SaldoItem;
 import com.chess.saldo.service.entities.SaldoType;
 
 public class MainActivity extends Activity {
@@ -87,32 +88,37 @@ public class MainActivity extends Activity {
             public void run() {
                 Saldo saldo = settings.getSaldo();
                 TextView cashTextView = (TextView) findViewById(R.id.cashValue);
-                cashTextView.setText(saldo.strMoneyUsed);
-                updateSaldoItem(R.id.main_panel_data, R.id.dataValue, R.id.dataProgress, Math.round(saldo.dataLeft), Math.round(saldo.dataTotal), SaldoType.DATA.widgetName);
-                updateSaldoItem(R.id.main_panel_minutes, R.id.minutesValue, R.id.minutesProgress, saldo.minutesLeft, saldo.minutesTotal, SaldoType.MINUTES.widgetName);
-                updateSaldoItem(R.id.main_panel_mms, R.id.mmsValue, R.id.mmsProgress, saldo.mmsLeft, saldo.mmsTotal, SaldoType.MMS.widgetName);
-                updateSaldoItem(R.id.main_panel_sms, R.id.smsValue, R.id.smsProgress, saldo.smsLeft, saldo.smsTotal, SaldoType.SMS.widgetName);
+                cashTextView.setText(saldo.moneyUsed);
+                updateSaldoItem(R.id.main_panel_data, R.id.dataValue, R.id.dataProgress, saldo, SaldoType.DATA);
+                updateSaldoItem(R.id.main_panel_minutes, R.id.minutesValue, R.id.minutesProgress, saldo, SaldoType.MINUTES);
+                updateSaldoItem(R.id.main_panel_mms, R.id.mmsValue, R.id.mmsProgress, saldo, SaldoType.MMS);
+                updateSaldoItem(R.id.main_panel_sms, R.id.smsValue, R.id.smsProgress, saldo, SaldoType.SMS);
             }
         });
     }
 
-    private void updateSaldoItem(int panelId, int textViewId, int progressBarId, int progressValue, int progressMax, String unit) {
+    private void updateSaldoItem(int panelId, int textViewId, int progressBarId, Saldo saldo, SaldoType type) {
         ViewGroup panel = (ViewGroup) findViewById(panelId);
-
-        if (progressValue == -1 || progressMax == -1) {
-            panel.setVisibility(View.GONE);
-        } else {
+        if (saldo.items.containsKey(type)) {
+            SaldoItem item = saldo.items.get(type);
             TextView textView = (TextView) findViewById(textViewId);
             ProgressBar progressBar = (ProgressBar) findViewById(progressBarId);
             panel.setVisibility(View.VISIBLE);
-            progressBar.setMax(progressMax);
-            progressBar.setProgress(progressValue);
-            textView.setText(String.format("%d av %d %s", progressValue, progressMax, unit));
+            if (item.isUnlimited()) {
+                progressBar.setVisibility(View.GONE);
+                textView.setText("\u221E");
+            } else {
+                progressBar.setVisibility(View.VISIBLE);
+                progressBar.setMax(item.total);
+                progressBar.setProgress(item.balance);
+                textView.setText(String.format("%d av %d %s", item.balance, item.total, type.unitSuffix));
+            }
+        } else {
+            panel.setVisibility(View.GONE);
         }
     }
 
     private class UpdateCompleteBroadcastReceiver extends BroadcastReceiver {
-
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d("CHESS_SALDO", "Received saldo update broadcast.");

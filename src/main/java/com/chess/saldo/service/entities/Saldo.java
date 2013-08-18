@@ -1,62 +1,30 @@
 package com.chess.saldo.service.entities;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 public class Saldo {
 
-    public final int smsTotal;
-    public final int smsLeft;
-    public final int mmsTotal;
-    public final int mmsLeft;
-    public final int minutesTotal;
-    public final int minutesLeft;
-    public final float dataTotal;
-    public final float dataLeft;
-    public final float moneyUsed;
-    public final String strMoneyUsed;
+    public final Map<SaldoType, SaldoItem> items = new TreeMap<SaldoType, SaldoItem>();
+    public final String moneyUsed;
 
-    public Saldo(int smsTotal, int smsLeft, int mmsTotal, int mmsLeft, int minutesTotal, int minutesLeft, float dataTotal, float dataLeft, float moneyUsed, String strMoneyUsed) {
-        this.smsTotal = smsTotal;
-        this.smsLeft = smsLeft;
-        this.mmsTotal = mmsTotal;
-        this.mmsLeft = mmsLeft;
-        this.minutesTotal = minutesTotal;
-        this.minutesLeft = minutesLeft;
-        this.dataTotal = dataTotal;
-        this.dataLeft = dataLeft;
+    public Saldo(String moneyUsed) {
         this.moneyUsed = moneyUsed;
-        this.strMoneyUsed = strMoneyUsed;
     }
 
-    public int getProgressFor(SaldoType type) {
-        switch (type) {
-            case DATA:
-                return Math.round(dataLeft);
-            case MINUTES:
-                return minutesLeft;
-            case MMS:
-                return mmsLeft;
-            case MONEY:
-                return Math.round(moneyUsed);
-            case SMS:
-                return smsLeft;
-            default:
-                throw new RuntimeException("Undefined case for saldo type: " + type);
+    @Override
+    public String toString() {
+        StringBuilder b = new StringBuilder();
+        b.append(String.format("Saldo: {money='%s' items=[", moneyUsed));
+        for (SaldoItem item : items.values()) {
+            b.append(String.format("%s={balance=%d total=%d} ", item.type.apiName, item.balance, item.total));
         }
+        b.append("]}");
+        return b.toString();
     }
 
-    public int getMaxFor(SaldoType type) {
-        switch (type) {
-            case DATA:
-                return Math.round(dataTotal);
-            case MINUTES:
-                return minutesTotal;
-            case MMS:
-                return mmsTotal;
-            case MONEY:
-                return Math.round(moneyUsed);
-            case SMS:
-                return smsTotal;
-            default:
-                throw new RuntimeException("Undefined case for saldo type: " + type);
-        }
+    public final int parseMoneyUsed() {
+        if (moneyUsed.isEmpty()) return 0;
+        return Math.round(Float.parseFloat(moneyUsed.substring(3).replace(",", ".")));
     }
 }
