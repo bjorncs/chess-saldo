@@ -73,7 +73,7 @@ public class UpdateService extends IntentService {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(UpdateService.this, message, Toast.LENGTH_LONG).show();
+                Toast.makeText(UpdateService.this, message, 1200).show();
             }
         });
     }

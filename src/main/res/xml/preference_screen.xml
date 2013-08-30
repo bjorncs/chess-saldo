@@ -7,6 +7,9 @@
 		<EditTextPreference android:summary="@string/password_summary" android:title="@string/password"
                             android:key="password" android:inputType="textPassword" android:singleLine="true" android:defaultValue=""/>
 	</PreferenceCategory>
+    <PreferenceCategory android:title="@string/general_summary">
+        <CheckBoxPreference android:summary="@string/fribruk_summary" android:title="@string/fribruk_title" android:key="show_fribruk" android:defaultValue="true"/>
+    </PreferenceCategory>
 	<PreferenceCategory android:title="@string/refresh_time_category">
 		<ListPreference 
 			android:title="@string/update_freq" 

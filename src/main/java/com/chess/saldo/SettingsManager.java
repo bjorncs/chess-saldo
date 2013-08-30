@@ -79,6 +79,10 @@ public class SettingsManager {
         return SaldoType.fromPrettyString(prefs.getString("widget." + widgetId + ".type", SaldoType.MONEY.prettyName));
     }
 
+    public boolean showFribrukQuota() {
+        return prefs.getBoolean("show_fribruk", true);
+    }
+
     private void updateLastUpdate() {
         Editor editor = prefs.edit();
         editor.putLong("service.lastupdate", System.currentTimeMillis());

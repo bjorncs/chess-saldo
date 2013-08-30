@@ -30,6 +30,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 intent.putExtra(UpdateService.SHOW_TOAST, true);
                 startService(intent);
             }
+        } else if (key.equals("show_fribruk")) {
+            WidgetProviders.updateAllWidgets(this);
         }
     }
 

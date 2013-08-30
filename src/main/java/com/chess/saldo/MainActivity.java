@@ -89,24 +89,24 @@ public class MainActivity extends Activity {
                 Saldo saldo = settings.getSaldo();
                 TextView cashTextView = (TextView) findViewById(R.id.cashValue);
                 cashTextView.setText(saldo.moneyUsed);
-                updateSaldoItem(R.id.main_panel_data, R.id.dataValue, R.id.dataProgress, saldo, SaldoType.DATA);
-                updateSaldoItem(R.id.main_panel_minutes, R.id.minutesValue, R.id.minutesProgress, saldo, SaldoType.MINUTES);
-                updateSaldoItem(R.id.main_panel_mms, R.id.mmsValue, R.id.mmsProgress, saldo, SaldoType.MMS);
-                updateSaldoItem(R.id.main_panel_sms, R.id.smsValue, R.id.smsProgress, saldo, SaldoType.SMS);
+                updateSaldoItem(R.id.main_panel_data, R.id.dataValue, R.id.dataProgress, saldo, SaldoType.DATA, settings);
+                updateSaldoItem(R.id.main_panel_minutes, R.id.minutesValue, R.id.minutesProgress, saldo, SaldoType.MINUTES, settings);
+                updateSaldoItem(R.id.main_panel_mms, R.id.mmsValue, R.id.mmsProgress, saldo, SaldoType.MMS, settings);
+                updateSaldoItem(R.id.main_panel_sms, R.id.smsValue, R.id.smsProgress, saldo, SaldoType.SMS, settings);
             }
         });
     }
 
-    private void updateSaldoItem(int panelId, int textViewId, int progressBarId, Saldo saldo, SaldoType type) {
+    private void updateSaldoItem(int panelId, int textViewId, int progressBarId, Saldo saldo, SaldoType type, SettingsManager settings) {
         ViewGroup panel = (ViewGroup) findViewById(panelId);
         if (saldo.items.containsKey(type)) {
             SaldoItem item = saldo.items.get(type);
             TextView textView = (TextView) findViewById(textViewId);
             ProgressBar progressBar = (ProgressBar) findViewById(progressBarId);
             panel.setVisibility(View.VISIBLE);
-            if (item.isUnlimited()) {
+            if (item.isUnlimited() && !settings.showFribrukQuota()) {
                 progressBar.setVisibility(View.GONE);
-                textView.setText("\u221E");
+                textView.setText("FriBRUK");
             } else {
                 progressBar.setVisibility(View.VISIBLE);
                 progressBar.setMax(item.total);

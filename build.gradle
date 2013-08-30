@@ -9,6 +9,10 @@ buildscript {
     }
 }
 
+tasks.withType(Compile) {
+    options.compilerArgs << "-Xlint:deprecation"
+}
+
 apply plugin: 'android'
 
 android {

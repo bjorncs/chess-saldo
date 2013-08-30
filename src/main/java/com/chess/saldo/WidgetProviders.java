@@ -24,12 +24,13 @@ public abstract class WidgetProviders extends AppWidgetProvider {
     public static class Large extends WidgetProviders {
 
         private static RemoteViews updateWidgetView(Context context) {
-            Saldo saldo = new SettingsManager(context).getSaldo();
+            SettingsManager settings = new SettingsManager(context);
+            Saldo saldo = settings.getSaldo();
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.large_widget_layout);
-            updateSaldoItem(views, R.id.dataProgress, R.id.dataProgressContainer, R.id.dataValue, saldo, SaldoType.DATA);
-            updateSaldoItem(views, R.id.minutesProgress, R.id.minutesProgressContainer, R.id.minutesValue, saldo, SaldoType.MINUTES);
-            updateSaldoItem(views, R.id.mmsProgress, R.id.mmsProgressContainer, R.id.mmsValue, saldo, SaldoType.MMS);
-            updateSaldoItem(views, R.id.smsProgress, R.id.smsProgressContainer, R.id.smsValue, saldo, SaldoType.SMS);
+            updateSaldoItem(views, R.id.dataProgress, R.id.dataProgressContainer, R.id.dataValue, saldo, SaldoType.DATA, settings);
+            updateSaldoItem(views, R.id.minutesProgress, R.id.minutesProgressContainer, R.id.minutesValue, saldo, SaldoType.MINUTES, settings);
+            updateSaldoItem(views, R.id.mmsProgress, R.id.mmsProgressContainer, R.id.mmsValue, saldo, SaldoType.MMS, settings);
+            updateSaldoItem(views, R.id.smsProgress, R.id.smsProgressContainer, R.id.smsValue, saldo, SaldoType.SMS, settings);
 
             Log.d("CHESS_SALDO", "Widget views updated with saldo information");
             if (saldo.moneyUsed.isEmpty()) {
@@ -63,7 +64,7 @@ public abstract class WidgetProviders extends AppWidgetProvider {
                 remoteViews.setTextViewText(R.id.lblSaldoValue, Integer.toString(saldo.parseMoneyUsed()));
                 remoteViews.setViewVisibility(R.id.pgrSaldoContainer, View.INVISIBLE);
             } else {
-                updateSaldoItem(remoteViews, R.id.pgrSaldo, R.id.pgrSaldoContainer, R.id.lblSaldoValue, saldo, type);
+                updateSaldoItem(remoteViews, R.id.pgrSaldo, R.id.pgrSaldoContainer, R.id.lblSaldoValue, saldo, type, settings);
             }
 
             Intent i = new Intent(context.getApplicationContext(), MainActivity.class);
@@ -79,11 +80,11 @@ public abstract class WidgetProviders extends AppWidgetProvider {
     }
 
     // Progress bar containter is workaround for issue 11040 (https://code.google.com/p/android/issues/detail?id=11040)
-    private static void updateSaldoItem(RemoteViews remoteViews, int progressId, int progressContainerId, int textId, Saldo saldo, SaldoType type) {
+    private static void updateSaldoItem(RemoteViews remoteViews, int progressId, int progressContainerId, int textId, Saldo saldo, SaldoType type, SettingsManager settings) {
         if (saldo.items.containsKey(type)) {
             SaldoItem item = saldo.items.get(type);
-            if (item.isUnlimited()) {
-                remoteViews.setTextViewText(textId, "\u221E");
+            if (item.isUnlimited() && !settings.showFribrukQuota()) {
+                remoteViews.setTextViewText(textId, "FRI");
                 remoteViews.setViewVisibility(progressContainerId, View.INVISIBLE);
             } else {
                 remoteViews.setTextViewText(textId, Integer.toString(item.balance));
@@ -95,6 +96,7 @@ public abstract class WidgetProviders extends AppWidgetProvider {
             remoteViews.setViewVisibility(progressContainerId, View.INVISIBLE);
         }
     }
+
 
     public static void updateAllWidgets(Context context) {
         AppWidgetManager manager = AppWidgetManager.getInstance(context);
