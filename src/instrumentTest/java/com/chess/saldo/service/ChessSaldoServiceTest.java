@@ -48,7 +48,7 @@ public class ChessSaldoServiceTest extends ActivityTestCase {
         Saldo saldo = new ChessSaldoService(username, password).fetchSaldo();
         assertNotNull(saldo);
         assertNotNull(saldo.moneyUsed);
-        assertFalse(saldo.moneyUsed.isEmpty());
+        assertFalse(saldo.moneyUsed.length() == 0);
         assertFalse(saldo.items.isEmpty());
     }
 

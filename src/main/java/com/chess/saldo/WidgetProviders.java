@@ -33,7 +33,7 @@ public abstract class WidgetProviders extends AppWidgetProvider {
             updateSaldoItem(views, R.id.smsProgress, R.id.smsProgressContainer, R.id.smsValue, saldo, SaldoType.SMS, settings);
 
             Log.d("CHESS_SALDO", "Widget views updated with saldo information");
-            if (saldo.moneyUsed.isEmpty()) {
+            if (saldo.moneyUsed.length() == 0) {
                 views.setTextViewText(R.id.cashValue, "-");
             } else {
                 views.setTextViewText(R.id.cashValue, Integer.toString(saldo.parseMoneyUsed()));

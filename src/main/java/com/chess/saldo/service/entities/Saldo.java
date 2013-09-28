@@ -24,7 +24,7 @@ public class Saldo {
     }
 
     public final int parseMoneyUsed() {
-        if (moneyUsed.isEmpty()) return 0;
+        if (moneyUsed.length() == 0) return 0;
         return Math.round(Float.parseFloat(moneyUsed.substring(3).replace(",", ".")));
     }
 }

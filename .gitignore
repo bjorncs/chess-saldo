@@ -15,5 +15,5 @@ gradle.properties
 # IntelliJ IDEA
 .idea/
 chess-saldo.iml
-
+local.properties
 
