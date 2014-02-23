@@ -10,38 +10,44 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 import com.bcseime.android.chess.saldo2.R;
-import com.chess.saldo.service.entities.Saldo;
-import com.chess.saldo.service.entities.SaldoItem;
-import com.chess.saldo.service.entities.SaldoType;
+import com.chess.saldo.service.Saldo;
 
 import java.util.Arrays;
 
-/**
- * Created by bjorncs on 08.06.13.
- */
 public abstract class WidgetProviders extends AppWidgetProvider {
 
     public static class Large extends WidgetProviders {
 
         private static RemoteViews updateWidgetView(Context context) {
-            SettingsManager settings = new SettingsManager(context);
+            Settings settings = new Settings(context);
             Saldo saldo = settings.getSaldo();
-            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.large_widget_layout);
-            updateSaldoItem(views, R.id.dataProgress, R.id.dataProgressContainer, R.id.dataValue, saldo, SaldoType.DATA, settings);
-            updateSaldoItem(views, R.id.minutesProgress, R.id.minutesProgressContainer, R.id.minutesValue, saldo, SaldoType.MINUTES, settings);
-            updateSaldoItem(views, R.id.mmsProgress, R.id.mmsProgressContainer, R.id.mmsValue, saldo, SaldoType.MMS, settings);
-            updateSaldoItem(views, R.id.smsProgress, R.id.smsProgressContainer, R.id.smsValue, saldo, SaldoType.SMS, settings);
+            RemoteViews root = new RemoteViews(context.getPackageName(), R.layout.large_widget_layout);
 
-            Log.d("CHESS_SALDO", "Widget views updated with saldo information");
-            if (saldo.moneyUsed.length() == 0) {
-                views.setTextViewText(R.id.cashValue, "-");
-            } else {
-                views.setTextViewText(R.id.cashValue, Integer.toString(saldo.parseMoneyUsed()));
+            if (saldo != null) {
+                root.removeAllViews(R.id.pot_container);
+                RemoteViews moneyView = new RemoteViews(context.getPackageName(), R.layout.widget_pot_item);
+                setMoneyConsumption(context, moneyView, saldo.getUsageSaldoAsInt());
+                root.addView(R.id.pot_container, moneyView);
+
+                if (saldo.hasPots()) {
+                    boolean showFribruk = settings.showFribruk();
+                    for (Saldo.Pot pot : saldo.getPots()) {
+                        RemoteViews divider = new RemoteViews(context.getPackageName(), R.layout.widget_divider);
+                        root.addView(R.id.pot_container, divider);
+
+                        RemoteViews potView = new RemoteViews(context.getPackageName(), R.layout.widget_pot_item);
+                        setPot(context, potView, pot, showFribruk);
+                        root.addView(R.id.pot_container, potView);
+                    }
+                }
+
+                Log.d("CHESS_SALDO", "Widget root updated with saldo information");
             }
+
             Intent i = new Intent(context.getApplicationContext(), MainActivity.class);
             PendingIntent updateServiceIntent = PendingIntent.getActivity(context.getApplicationContext(), 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
-            views.setOnClickPendingIntent(R.id.widget_layout, updateServiceIntent);
-            return views;
+            root.setOnClickPendingIntent(R.id.pot_container, updateServiceIntent);
+            return root;
         }
 
         @Override
@@ -53,24 +59,26 @@ public abstract class WidgetProviders extends AppWidgetProvider {
     public static class Small extends WidgetProviders {
 
         private static RemoteViews updateWidgetView(Context context, int widgetId) {
-            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.small_widget_layout);
-
-            SettingsManager settings = new SettingsManager(context);
+            RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.small_widget_layout);
+            Settings settings = new Settings(context);
             Saldo saldo = settings.getSaldo();
-            SaldoType type = settings.getWidgetType(widgetId);
+            String type = settings.getWidgetType(widgetId);
 
-            remoteViews.setTextViewText(R.id.lblSaldoType, type.unitSuffix);
-            if (type == SaldoType.MONEY) {
-                remoteViews.setTextViewText(R.id.lblSaldoValue, Integer.toString(saldo.parseMoneyUsed()));
-                remoteViews.setViewVisibility(R.id.pgrSaldoContainer, View.INVISIBLE);
-            } else {
-                updateSaldoItem(remoteViews, R.id.pgrSaldo, R.id.pgrSaldoContainer, R.id.lblSaldoValue, saldo, type, settings);
+            if (saldo != null) {
+                if (type.equalsIgnoreCase("money")) {
+                    setMoneyConsumption(context, rv, saldo.getUsageSaldoAsInt());
+                } else {
+                    Saldo.Pot pot = saldo.getPot(type);
+                    if (pot != null) {
+                        setPot(context, rv, pot, settings.showFribruk());
+                    }
+                }
             }
 
             Intent i = new Intent(context.getApplicationContext(), MainActivity.class);
             PendingIntent updateServiceIntent = PendingIntent.getActivity(context.getApplicationContext(), 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
-            remoteViews.setOnClickPendingIntent(R.id.widget_layout, updateServiceIntent);
-            return remoteViews;
+            rv.setOnClickPendingIntent(R.id.pot_container, updateServiceIntent);
+            return rv;
         }
 
         @Override
@@ -79,24 +87,24 @@ public abstract class WidgetProviders extends AppWidgetProvider {
         }
     }
 
-    // Progress bar containter is workaround for issue 11040 (https://code.google.com/p/android/issues/detail?id=11040)
-    private static void updateSaldoItem(RemoteViews remoteViews, int progressId, int progressContainerId, int textId, Saldo saldo, SaldoType type, SettingsManager settings) {
-        if (saldo.items.containsKey(type)) {
-            SaldoItem item = saldo.items.get(type);
-            if (item.isUnlimited() && !settings.showFribrukQuota()) {
-                remoteViews.setTextViewText(textId, "FRI");
-                remoteViews.setViewVisibility(progressContainerId, View.INVISIBLE);
-            } else {
-                remoteViews.setTextViewText(textId, Integer.toString(item.balance));
-                remoteViews.setViewVisibility(progressContainerId, View.VISIBLE);
-                remoteViews.setProgressBar(progressId, item.total, item.balance, false);
-            }
-        } else {
-            remoteViews.setTextViewText(textId, "-");
-            remoteViews.setViewVisibility(progressContainerId, View.INVISIBLE);
-        }
+    // Progress bar container is workaround for issue 11040 (https://code.google.com/p/android/issues/detail?id=11040)
+    private static void setMoneyConsumption(Context context, RemoteViews rv, int moneyConsumption) {
+        rv.setViewVisibility(R.id.pot_progress_container, View.GONE);
+        rv.setTextViewText(R.id.pot_value, moneyConsumption != -1 ? Integer.toString(moneyConsumption) : "-");
+        rv.setTextViewText(R.id.pot_unit, context.getString(R.string.kroner_unit));
     }
 
+    // Progress bar container is workaround for issue 11040 (https://code.google.com/p/android/issues/detail?id=11040)
+    private static void setPot(Context context, RemoteViews rv, Saldo.Pot pot, boolean showFribruk) {
+        if (pot.freeUsage && !showFribruk) {
+            rv.setTextViewText(R.id.pot_value, context.getString(R.string.fribruk_widget));
+            rv.setViewVisibility(R.id.pot_progress_container, View.GONE);
+        } else {
+            rv.setTextViewText(R.id.pot_value, Integer.toString(pot.balance));
+            rv.setProgressBar(R.id.pot_progress, pot.total, pot.balance, false);
+        }
+        rv.setTextViewText(R.id.pot_unit, pot.unit);
+    }
 
     public static void updateAllWidgets(Context context) {
         AppWidgetManager manager = AppWidgetManager.getInstance(context);

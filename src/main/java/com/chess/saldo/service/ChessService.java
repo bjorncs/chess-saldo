@@ -1,62 +1,52 @@
 package com.chess.saldo.service;
 
-import com.chess.saldo.service.entities.Saldo;
+import android.content.Context;
+
+import com.bcseime.android.chess.saldo2.R;
+
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.client.DefaultRedirectHandler;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.protocol.HTTP;
-import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.security.KeyStore;
-import java.util.ArrayList;
-import java.util.List;
 
-public class ChessSaldoService {
+public class ChessService {
     private static final int CONN_TIMEOUT = 14 * 1000;
     private static final int SOCKET_TIMEOUT = 24 * 1000;
 
-
+    private final DefaultHttpClient client;
+    private final Context context;
     private String username;
     private String password;
-    private final DefaultHttpClient client;
 
-    public ChessSaldoService(String username, String password) {
-        this();
+    public ChessService(Context context, String username, String password) {
+        this(context);
         this.username = username;
         this.password = password;
     }
 
-    public ChessSaldoService() {
+    public ChessService(Context context) {
         this.client = createHttpClient();
+        this.context = context.getApplicationContext();
     }
 
-    public synchronized Saldo fetchSaldo() throws IOException, ServiceException {
+    public synchronized Saldo fetchSaldo() throws IOException, ChessServiceException {
         HttpGet request = createRequest();
         HttpResponse response = client.execute(request);
-
         return parseResponse(response);
-    }
-
-    private Saldo parseResponse(HttpResponse response) throws IOException, ServiceException {
-        String htmlText = EntityUtils.toString(response.getEntity(), HTTP.UTF_8);
-        response.getEntity().consumeContent();
-        return SaldoParser.parsePage(htmlText);
     }
 
     private HttpGet createRequest() {
@@ -72,16 +62,8 @@ public class ChessSaldoService {
         return httpGet;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public void setPassword(String password) {
@@ -110,6 +92,28 @@ public class ChessSaldoService {
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+
+    private Saldo parseResponse(HttpResponse response) throws IOException, ChessServiceException {
+        try {
+            String jsonText = EntityUtils.toString(response.getEntity(), HTTP.UTF_8);
+            response.getEntity().consumeContent();
+            JSONObject responseObject = unwrapResponseObject(jsonText);
+            Saldo saldo = new Saldo(responseObject);
+            if (!saldo.isLoginSuccessful()) {
+                throw new ChessServiceException(saldo.getErrorMessage());
+            }
+            return saldo;
+        } catch (JSONException e) {
+            throw new ChessServiceException(context.getString(R.string.server_down_err_msg), e);
+        }
+    }
+
+    private static JSONObject unwrapResponseObject(String text) throws JSONException {
+        JSONObject wrapper = new JSONObject(text);
+        String rawObj = wrapper.getString("d");
+        return new JSONObject(rawObj.replace("\\", ""));
     }
 
 }

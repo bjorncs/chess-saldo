@@ -15,7 +15,7 @@ public class ConnectivityBroadcastReceiver extends BroadcastReceiver {
     private volatile static PendingIntent alarmIntent;
 
     public static void setUpdateAlarm(Context context) {
-        int updateFreq = new SettingsManager(context).getUpdateFrequency();
+        int updateFreq = new Settings(context).getUpdateFrequency();
 
         AlarmManager amng = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmIntent != null) {
@@ -57,7 +57,7 @@ public class ConnectivityBroadcastReceiver extends BroadcastReceiver {
     }
 
     private boolean shouldUpdate(Context context) {
-        SettingsManager mgr = new SettingsManager(context);
+        Settings mgr = new Settings(context);
         long current = System.currentTimeMillis();
         long last = mgr.getLastUpdate();
         long difference = current - last;

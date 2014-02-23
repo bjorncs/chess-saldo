@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+
 import com.bcseime.android.chess.saldo2.R;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -20,18 +21,23 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals("widget.updatefreq")) {
-            ConnectivityBroadcastReceiver.setUpdateAlarm(getApplicationContext());
-        } else if (key.equals("username") || key.equals("password")) {
-            String username = sharedPreferences.getString("username", "");
-            String password = sharedPreferences.getString("password", "");
-            if (username.length() > 0 && password.length() > 0) {
-                Intent intent = new Intent(this, UpdateService.class);
-                intent.putExtra(UpdateService.SHOW_TOAST, true);
-                startService(intent);
-            }
-        } else if (key.equals("show_fribruk")) {
-            WidgetProviders.updateAllWidgets(this);
+        switch (key) {
+            case "widget.updatefreq":
+                ConnectivityBroadcastReceiver.setUpdateAlarm(getApplicationContext());
+                break;
+            case "username":
+            case "password":
+                String username = sharedPreferences.getString("username", "");
+                String password = sharedPreferences.getString("password", "");
+                if (username.length() > 0 && password.length() > 0) {
+                    Intent intent = new Intent(this, UpdateService.class);
+                    intent.putExtra(UpdateService.SHOW_TOAST, true);
+                    startService(intent);
+                }
+                break;
+            case "show_fribruk":
+                WidgetProviders.updateAllWidgets(this);
+                break;
         }
     }
 

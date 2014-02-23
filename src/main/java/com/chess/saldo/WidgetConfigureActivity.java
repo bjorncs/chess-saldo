@@ -7,24 +7,22 @@ import android.appwidget.AppWidgetProviderInfo;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.chess.saldo.service.ChessSaldoService;
-import com.chess.saldo.service.entities.Saldo;
-import com.chess.saldo.service.entities.SaldoType;
+import com.bcseime.android.chess.saldo2.R;
+import com.chess.saldo.service.Saldo;
+
+import java.util.List;
 
 public class WidgetConfigureActivity extends Activity {
 
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-    private SettingsManager settings;
+    private Settings settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        settings = new SettingsManager(getApplicationContext());
+        settings = new Settings(getApplicationContext());
         setResult(RESULT_CANCELED);
 
         Intent intent = getIntent();
@@ -65,18 +63,45 @@ public class WidgetConfigureActivity extends Activity {
     }
 
     private void createListDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Type")
-                .setItems(SaldoType.prettyNames(), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        SaldoType type = SaldoType.values()[i];
-                        SettingsManager mgr = new SettingsManager(WidgetConfigureActivity.this);
-                        mgr.setWidgetType(type, mAppWidgetId);
-                        returnSuccess();
-                    }
-                })
-                .show();
+        Saldo saldo = settings.getSaldo();
+        if (saldo == null) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.saldo_missing_title)
+                    .setMessage(R.string.saldo_missing_desc)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            startActivityForResult(new Intent(WidgetConfigureActivity.this, SettingsActivity.class), mAppWidgetId);
+                        }
+                    })
+                    .show();
+        } else {
+            List<Saldo.Pot> pots = saldo.getPots();
+            int size = pots.size() + 1;
+            final String[] types = new String[size];
+            String[] typesPrettyNames = new String[size];
+
+            types[0] = "money";
+            typesPrettyNames[0] = getString(R.string.money_consumption);
+
+            for (int i = 0; i < pots.size(); i++) {
+                Saldo.Pot pot = pots.get(i);
+                types[i + 1] = pot.type;
+                typesPrettyNames[i + 1] = pot.typeDescription;
+            }
+
+            new AlertDialog.Builder(this)
+                    .setTitle("Type")
+                    .setItems(typesPrettyNames, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            settings.setWidgetType(types[i], mAppWidgetId);
+                            returnSuccess();
+                        }
+                    })
+                    .show();
+
+        }
     }
 
     private void returnSuccess() {

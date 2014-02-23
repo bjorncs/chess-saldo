@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Chess Saldo</string>
+    <string name="name_widget_large">Chess Saldo (alle potter)</string>
+    <string name="name_widget_small">Chess Saldo (enkeltpott)</string>
+    <string name="update_freq_summary">Hvor ofte skal saldo-informasjon oppdateres.</string>
+    <string name="update_freq">Oppdateringsfrekvens</string>
+    <string name="refresh_time_category">Widget</string>
+    <string name="account_info_category">Chess konto</string>
+    <string name="password_summary">Passord for Chess.no.</string>
+    <string name="password">Passord</string>
+    <string name="username_summary">Mobilnummer for Chess.no.</string>
+    <string name="username">Brukernavn</string>
+    <string name="prefs_title">Innstillinger for Chess Saldo</string>
+    <string name="misc_summary">Diverse</string>
+    <string name="fribruk_summary">Vis faktisk forbruk for FriBRUK/ubegrensede potter.</string>
+    <string name="fribruk_title">Vis saldo for FriBRUK</string>
+    <string name="divider_content_description">Divider</string>
+    <string name="server_down_err_msg">Ugyldig svar fra Chess-server. Server trolig nede for vedlikehold, prøv igjen senere!</string>
+    <string name="credentials_missing">Brukernavn eller passord mangler.</string>
+    <string name="updating">Oppdaterer…</string>
+    <string name="update_finished">Ferdig!</string>
+    <string name="update_menu_item">Oppdater</string>
+    <string name="settings_menu_item">Innstillinger</string>
+    <string name="money_consumption">Forbruk</string>
+    <string name="fribruk">FriBRUK</string>
+    <string name="kroner_unit">KR</string>
+    <string name="fribruk_widget">FRI</string>
+    <string name="saldo_missing_title">Saldo mangler</string>
+    <string name="saldo_missing_desc">Vennligst oppdater saldo-informasjon minst en gang før du prøver å legge til widget på nytt.</string>
+
+    <string-array name="update_freq_options">
+        <item>15 minutter</item>
+        <item>30 minutter</item>
+        <item>1 time</item>
+        <item>3 timer</item>
+        <item>6 timer</item>
+        <item>12 timer</item>
+        <item>24 timer</item>
+    </string-array>
+</resources>

@@ -6,7 +6,7 @@
         android:minWidth="272dp"
         android:minHeight="56dp"
         android:resizeMode="horizontal"
-        android:minResizeWidth="136dp"
+        android:minResizeWidth="56dp"
         android:configure="com.chess.saldo.WidgetConfigureActivity"
         android:previewImage="@drawable/preview_large">
 </appwidget-provider>

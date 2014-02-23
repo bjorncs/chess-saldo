@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@drawable/background_flat"
+              android:gravity="center_horizontal">
+    <TextView
+        android:id="@+id/pot_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:gravity="center"/>
+    <ImageView
+        android:src="@android:drawable/divider_horizontal_dim_dark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="1dp"
+        android:paddingTop="1dp"
+        android:contentDescription="@string/divider_content_description"/>
+    <TextView
+        android:id="@+id/pot_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:layout_margin="4dp"
+        android:gravity="center"
+        android:textColor="@android:color/white"/>
+    <ProgressBar
+        android:id="@+id/pot_progress"
+        android:progressDrawable="@drawable/blueprogress"
+        android:layout_height="12dp"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="12dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        style="@android:style/Widget.ProgressBar.Horizontal"/>
+</LinearLayout>

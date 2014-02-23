@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:padding="1dp">
+    <TextView
+        android:id="@+id/pot_value"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:textColor="@android:color/white"/>
+    <TextView
+        android:id="@+id/pot_unit"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:textColor="@android:color/white"/>
+    <!-- Fix for: https://code.google.com/p/android/issues/detail?id=11040 -->
+    <FrameLayout
+        android:id="@+id/pot_progress_container"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+        <ProgressBar
+            android:id="@+id/pot_progress"
+            android:layout_height="6dp"
+            android:layout_width="match_parent"
+            android:progressDrawable="@drawable/blueprogress"
+            style="@android:style/Widget.ProgressBar.Horizontal"/>
+    </FrameLayout>
+</LinearLayout>

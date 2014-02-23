@@ -4,14 +4,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import com.bcseime.android.chess.saldo2.test.R;
-import com.chess.saldo.service.entities.Saldo;
 import junit.framework.Assert;
 import android.test.ActivityTestCase;
 
-import com.chess.saldo.service.ServiceException.Type;
+import com.bcseime.android.chess.saldo2.test.R;
 
-public class ChessSaldoServiceTest extends ActivityTestCase {
+public class ChessServiceTest extends ActivityTestCase {
 
     private String username;
     private String password;
@@ -45,31 +43,29 @@ public class ChessSaldoServiceTest extends ActivityTestCase {
     }
 
     public void testGetQuotaInfo() throws Exception {
-        Saldo saldo = new ChessSaldoService(username, password).fetchSaldo();
+        Saldo saldo = new ChessService(getInstrumentation().getContext(), username, password).fetchSaldo();
         assertNotNull(saldo);
-        assertNotNull(saldo.moneyUsed);
-        assertFalse(saldo.moneyUsed.length() == 0);
-        assertFalse(saldo.items.isEmpty());
+        assertTrue(saldo.hasPots());
+        assertNotSame(saldo.getUsageSaldo(), "-");
+        assertFalse(saldo.getPots().isEmpty());
     }
 
     public void testInvalidUsername() throws IOException {
         try {
-            new ChessSaldoService("invalid_username", password).fetchSaldo();
+            new ChessService(getInstrumentation().getContext(), "invalid_username", password).fetchSaldo();
             Assert.fail("Service should throw exception on wrong username");
-
-        } catch (ServiceException ex) {
-            Assert.assertEquals(Type.LoginProblem, ex.getType());
+        } catch (ChessServiceException e) {
+            assertFalse(e.getMessage().isEmpty());
         }
     }
 
     public void testInvalidPassword() throws IOException {
         try {
-            new ChessSaldoService(username, "wrong_password").fetchSaldo();
+            new ChessService(getInstrumentation().getContext(), username, "wrong_password").fetchSaldo();
             Assert.fail("Service should throw exception on wrong password");
-        } catch (ServiceException ex) {
-            Assert.assertEquals(Type.LoginProblem, ex.getType());
+        } catch (ChessServiceException e) {
+            assertFalse(e.getMessage().isEmpty());
         }
-
     }
 
 }

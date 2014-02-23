@@ -1,16 +1,14 @@
 package com.chess.saldo;
 
 import android.app.IntentService;
-import android.app.Service;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Handler;
-import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.chess.saldo.service.ChessSaldoService;
-import com.chess.saldo.service.entities.Saldo;
+import com.bcseime.android.chess.saldo2.R;
+import com.chess.saldo.service.ChessService;
+import com.chess.saldo.service.Saldo;
 
 public class UpdateService extends IntentService {
 
@@ -18,8 +16,8 @@ public class UpdateService extends IntentService {
     public static final String SHOW_TOAST = "com.chess.saldo.SHOW_TOAST";
 
     private Handler handler;
-    private SettingsManager settings;
-    private ChessSaldoService service;
+    private Settings settings;
+    private ChessService service;
 
     public UpdateService() {
         super("ChessSaldoUpdateService");
@@ -29,8 +27,8 @@ public class UpdateService extends IntentService {
     public void onCreate() {
         super.onCreate();
         handler = new Handler();
-        settings = new SettingsManager(this);
-        service = new ChessSaldoService(settings.getUsername(), settings.getPassword());
+        settings = new Settings(this);
+        service = new ChessService(this, settings.getUsername(), settings.getPassword());
     }
 
     @Override
@@ -39,13 +37,13 @@ public class UpdateService extends IntentService {
         boolean showToast = intent.getBooleanExtra(SHOW_TOAST, false);
 
         if (!settings.isUserCredentialsSet()) {
-            postToast("Chess Saldo:\nBrukernavn eller passord mangler.");
+            postToast(getString(R.string.credentials_missing));
             Log.d("CHESS_SALDO", "Username and/or password missing.");
             return;
         }
 
         if (showToast) {
-            postToast("Chess Saldo: Oppdaterer saldo...");
+            postToast(getString(R.string.updating));
         }
         try {
             service.setUsername(settings.getUsername());
@@ -56,7 +54,7 @@ public class UpdateService extends IntentService {
             WidgetProviders.updateAllWidgets(getApplicationContext());
 
             if (showToast) {
-                postToast("Chess Saldo: Saldo oppdatert!");
+                postToast(getString(R.string.update_finished));
             }
             Log.d("CHESS_SALDO", "Sending saldo update broadcast.");
             sendBroadcast(new Intent(UPDATE_COMPLETE_ACTION));
@@ -64,7 +62,7 @@ public class UpdateService extends IntentService {
         } catch (Exception e) {
             Log.w("CHESS_SALDO", e.toString());
             if (showToast) {
-                postToast("Chess Saldo:\n" + e.getMessage());
+                postToast(e.getMessage());
             }
         }
     }
@@ -73,7 +71,7 @@ public class UpdateService extends IntentService {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(UpdateService.this, message, 1200).show();
+                Toast.makeText(UpdateService.this, message, Toast.LENGTH_SHORT).show();
             }
         });
     }

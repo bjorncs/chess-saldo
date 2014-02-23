@@ -1,20 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/widget_layout"
-              android:background="@drawable/background_widget"
-              android:orientation="vertical" android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:padding="2dp"
-              android:layout_marginTop="3dp"
-              android:layout_marginBottom="3dp"
-              android:layout_marginLeft="3dp"
-              android:layout_marginRight="3dp">
-
-    <LinearLayout style="@style/WidgetInnerSlotLayout">
-        <TextView style="@style/WidgetSaldoTextView" android:id="@+id/lblSaldoValue"/>
-        <TextView style="@style/WidgetSaldoTypeTextView" android:text="TYPE" android:id="@+id/lblSaldoType"/>
-    </LinearLayout>
-    <FrameLayout style="@style/WidgetProgressBarContainer" android:id="@+id/pgrSaldoContainer">
-        <ProgressBar style="@style/WidgetProgessBar" android:id="@+id/pgrSaldo"/>
-    </FrameLayout>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pot_container"
+    android:background="@drawable/background_widget"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="2dp"
+    android:layout_margin="3dp">
+    <include layout="@layout/widget_pot_item"/>
 </LinearLayout>

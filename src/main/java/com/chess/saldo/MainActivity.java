@@ -7,25 +7,33 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.*;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+
 import com.bcseime.android.chess.saldo2.R;
-import com.chess.saldo.service.entities.Saldo;
-import com.chess.saldo.service.entities.SaldoItem;
-import com.chess.saldo.service.entities.SaldoType;
+import com.chess.saldo.service.Saldo;
+
+import java.util.List;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 public class MainActivity extends Activity {
 
     private UpdateCompleteBroadcastReceiver receiver;
-
-    private SettingsManager settings;
+    private Settings settings;
+    @InjectView(R.id.main) LinearLayout viewContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.settings = new SettingsManager(getApplicationContext());
+        this.settings = new Settings(getApplicationContext());
         setContentView(R.layout.main_layout);
+        ButterKnife.inject(this);
         if (!settings.isUserCredentialsSet()) {
             showPreferenceActivity();
         }
@@ -55,11 +63,6 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
@@ -83,46 +86,49 @@ public class MainActivity extends Activity {
     }
 
     private void updateUI() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Saldo saldo = settings.getSaldo();
-                TextView cashTextView = (TextView) findViewById(R.id.cashValue);
-                cashTextView.setText(saldo.moneyUsed);
-                updateSaldoItem(R.id.main_panel_data, R.id.dataValue, R.id.dataProgress, saldo, SaldoType.DATA, settings);
-                updateSaldoItem(R.id.main_panel_minutes, R.id.minutesValue, R.id.minutesProgress, saldo, SaldoType.MINUTES, settings);
-                updateSaldoItem(R.id.main_panel_mms, R.id.mmsValue, R.id.mmsProgress, saldo, SaldoType.MMS, settings);
-                updateSaldoItem(R.id.main_panel_sms, R.id.smsValue, R.id.smsProgress, saldo, SaldoType.SMS, settings);
-            }
-        });
-    }
+        Saldo saldo = settings.getSaldo();
+        boolean showFribruk = settings.showFribruk();
+        if (saldo != null) {
+            viewContainer.removeAllViews();
+            LayoutInflater inflater = LayoutInflater.from(this);
 
-    private void updateSaldoItem(int panelId, int textViewId, int progressBarId, Saldo saldo, SaldoType type, SettingsManager settings) {
-        ViewGroup panel = (ViewGroup) findViewById(panelId);
-        if (saldo.items.containsKey(type)) {
-            SaldoItem item = saldo.items.get(type);
-            TextView textView = (TextView) findViewById(textViewId);
-            ProgressBar progressBar = (ProgressBar) findViewById(progressBarId);
-            panel.setVisibility(View.VISIBLE);
-            if (item.isUnlimited() && !settings.showFribrukQuota()) {
-                progressBar.setVisibility(View.GONE);
-                textView.setText("FriBRUK");
-            } else {
-                progressBar.setVisibility(View.VISIBLE);
-                progressBar.setMax(item.total);
-                progressBar.setProgress(item.balance);
-                textView.setText(String.format("%d av %d %s", item.balance, item.total, type.unitSuffix));
+            // Add money consumption
+            View moneyView = inflater.inflate(R.layout.pot_item, viewContainer, false);
+            PotViewHolder moneyHolder = new PotViewHolder(moneyView);
+            moneyHolder.progress.setVisibility(View.GONE);
+            moneyHolder.name.setText(R.string.money_consumption);
+            moneyHolder.value.setText(saldo.getUsageSaldo());
+            viewContainer.addView(moneyView);
+
+            List<Saldo.Pot> pots = saldo.getPots();
+            for (Saldo.Pot pot : pots) {
+                View potView = inflater.inflate(R.layout.pot_item, viewContainer, false);
+                PotViewHolder potHolder = new PotViewHolder(potView);
+                potHolder.name.setText(pot.typeDescription);
+                if (pot.freeUsage && !showFribruk) {
+                    potHolder.value.setText(R.string.fribruk);
+                    potHolder.progress.setVisibility(View.GONE);
+                } else {
+                    potHolder.value.setText(String.format("%d of %d %s", pot.balance, pot.total, pot.unit));
+                    potHolder.progress.setMax(pot.total);
+                    potHolder.progress.setProgress(pot.balance);
+                }
+                viewContainer.addView(potView);
             }
-        } else {
-            panel.setVisibility(View.GONE);
         }
     }
+
 
     private class UpdateCompleteBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d("CHESS_SALDO", "Received saldo update broadcast.");
-            updateUI();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    updateUI();
+                }
+            });
         }
     }
 }

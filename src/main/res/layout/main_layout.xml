@@ -1,38 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:layout_height="fill_parent" android:layout_width="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
+<ScrollView
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 	<LinearLayout 
-		android:id="@+id/main" android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:orientation="vertical">
-		
-		<LinearLayout style="@style/MainSlotLayout" android:id="@+id/main_panel_cash">
-			<TextView style="@style/MainTypeTextView" android:text="Foreløpig forbruk" />
-			<ImageView style="@style/MainDivider"/>
-			<TextView style="@style/MainSaldoTextView" android:id="@+id/cashValue"/>
-		</LinearLayout>
-		<LinearLayout style="@style/MainSlotLayout" android:id="@+id/main_panel_minutes">
-			<TextView style="@style/MainTypeTextView" android:text="Ringetid" />
-			<ImageView style="@style/MainDivider"/>
-			<TextView style="@style/MainSaldoTextView"  android:id="@+id/minutesValue"/>
-			<ProgressBar style="@style/MainProgessBar" android:id="@+id/minutesProgress"/>
-		</LinearLayout>
-	    <LinearLayout style="@style/MainSlotLayout"  android:id="@+id/main_panel_sms">
-			<TextView style="@style/MainTypeTextView" android:text="SMS" />
-			<ImageView style="@style/MainDivider"/>
-					<TextView style="@style/MainSaldoTextView"  android:id="@+id/smsValue"/>
-			<ProgressBar style="@style/MainProgessBar" android:id="@+id/smsProgress"/>
-		</LinearLayout>
-		<LinearLayout style="@style/MainSlotLayout" android:id="@+id/main_panel_mms">
-			<TextView style="@style/MainTypeTextView" android:text="MMS" />
-			<ImageView style="@style/MainDivider"/>
-			<TextView style="@style/MainSaldoTextView"  android:id="@+id/mmsValue"/>
-			<ProgressBar style="@style/MainProgessBar" android:id="@+id/mmsProgress"/>
-		</LinearLayout>
-	    <LinearLayout style="@style/MainSlotLayout" android:id="@+id/main_panel_data">
-			<TextView style="@style/MainTypeTextView" android:text="Datatrafikk" />
-			<ImageView style="@style/MainDivider"/>
-			<TextView style="@style/MainSaldoTextView"  android:id="@+id/dataValue"/>
-			<ProgressBar style="@style/MainProgessBar" android:id="@+id/dataProgress"/>
-		</LinearLayout> 
-
-	</LinearLayout>
+		android:id="@+id/main"
+        android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+        android:orientation="vertical"/>
 </ScrollView>

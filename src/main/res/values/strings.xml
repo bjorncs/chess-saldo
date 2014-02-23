@@ -1,19 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Chess Saldo</string>
-	<string name="name_widget_large">Chess Saldo (4x1)</string>
-    <string name="name_widget_small">Chess Saldo (1x1)</string>
-	
-	<string name="update_freq_summary">Oppdateringsfrekvens for henting av saldo.</string>
-    <string name="update_freq">Oppdateringsfrekvens</string>
+	<string name="name_widget_large">Chess Saldo (all pots)</string>
+    <string name="name_widget_small">Chess Saldo (single pot)</string>
+	<string name="update_freq_summary">Specify how often pots are updated.</string>
+    <string name="update_freq">Update frequency</string>
     <string name="refresh_time_category">Widget</string>
-    <string name="account_info_category">Chess-konto</string>
-    <string name="password_summary">Passord for Chess.no.</string>
-    <string name="username_summary">Telefonnummer for Chess.no.</string>
-    <string name="prefs_title">Innstillinger for Chess Saldo</string>
-	<string name="username">Brukernavn</string>
-	<string name="password">Passord</string>
-    <string name="general_summary">Generelt</string>
-    <string name="fribruk_summary">Vis faktisk forbruk for FriBRUK-potter. FriBRUK-potter er alltid  på 20000 per måned.</string>
-    <string name="fribruk_title">Vis forbruk for FriBRUK</string>
+    <string name="account_info_category">Chess account</string>
+    <string name="password_summary">Password for Chess.no.</string>
+	<string name="password">Password</string>
+    <string name="username_summary">Cellphone number for Chess.no.</string>
+	<string name="username">Username</string>
+    <string name="prefs_title">Settings for Chess Saldo</string>
+    <string name="misc_summary">Misc</string>
+    <string name="fribruk_summary">Show actual consumption for FriBRUK/unlimited pots.</string>
+    <string name="fribruk_title">Show FriBRUK consumption</string>
+    <string name="divider_content_description">Divider</string>
+    <string name="server_down_err_msg">Invalid reply from Chess server. Probably server maintenance, please try again later!</string>
+    <string name="credentials_missing">Username or password missing.</string>
+    <string name="updating">Updating…</string>
+    <string name="update_finished">Update finished!</string>
+    <string name="update_menu_item">Update</string>
+    <string name="settings_menu_item">Settings</string>
+    <string name="money_consumption">Money usage</string>
+    <string name="fribruk">FriBRUK</string>
+    <string name="kroner_unit">KR</string>
+    <string name="fribruk_widget">FRI</string>
+    <string name="saldo_missing_title">Data missing</string>
+    <string name="saldo_missing_desc">Please update Chess data at least once prior to adding an widget.</string>
+
+    <string-array name="update_freq_options">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hour</item>
+        <item>6 hour</item>
+        <item>12 hours</item>
+        <item>24 hours</item>
+    </string-array>
 </resources>
