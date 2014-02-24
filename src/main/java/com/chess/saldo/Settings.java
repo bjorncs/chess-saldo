@@ -59,12 +59,12 @@ public class Settings {
 
     public void setWidgetType(String type, int widgetId) {
         Editor editor = prefs.edit();
-        editor.putString("widget." + widgetId + ".type", type);
+        editor.putString("widget." + widgetId + ".pot", type);
         editor.commit();
     }
 
     public String getWidgetType(int widgetId) {
-        return prefs.getString("widget." + widgetId + ".type", "?");
+        return prefs.getString("widget." + widgetId + ".pot", "money");
     }
 
     public boolean showFribruk() {

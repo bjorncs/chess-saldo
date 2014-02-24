@@ -22,7 +22,7 @@
     <string name="update_finished">Update finished!</string>
     <string name="update_menu_item">Update</string>
     <string name="settings_menu_item">Settings</string>
-    <string name="money_consumption">Money usage</string>
+    <string name="money_consumption">Forbruk</string>
     <string name="fribruk">FriBRUK</string>
     <string name="kroner_unit">KR</string>
     <string name="fribruk_widget">FRI</string>
