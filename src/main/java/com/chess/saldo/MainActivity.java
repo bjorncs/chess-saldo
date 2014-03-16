@@ -109,9 +109,14 @@ public class MainActivity extends Activity {
                     potHolder.value.setText(R.string.fribruk);
                     potHolder.progress.setVisibility(View.GONE);
                 } else {
-                    potHolder.value.setText(String.format("%d of %d %s", pot.balance, pot.total, pot.unit));
                     potHolder.progress.setMax(pot.total);
-                    potHolder.progress.setProgress(pot.balance);
+                    if (settings.showConsumption()) {
+                        potHolder.value.setText(String.format("%d of %d %s", pot.total - pot.balance, pot.total, pot.unit));
+                        potHolder.progress.setProgress(pot.total - pot.balance);
+                    } else {
+                        potHolder.value.setText(String.format("%d of %d %s", pot.balance, pot.total, pot.unit));
+                        potHolder.progress.setProgress(pot.balance);
+                    }
                 }
                 viewContainer.addView(potView);
             }

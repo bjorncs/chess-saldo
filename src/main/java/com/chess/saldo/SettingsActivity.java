@@ -36,6 +36,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 }
                 break;
             case "show_fribruk":
+            case "show_consumption":
                 WidgetProviders.updateAllWidgets(this);
                 break;
         }

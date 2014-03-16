@@ -53,6 +53,10 @@ public class Settings {
         return Integer.parseInt(prefs.getString("widget.updatefreq", "3600000"));
     }
 
+    public boolean showConsumption() {
+        return prefs.getBoolean("show_consumption", false);
+    }
+
     public long getLastUpdate() {
         return prefs.getLong("service.lastupdate", 0);
     }

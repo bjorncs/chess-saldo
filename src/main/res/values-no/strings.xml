@@ -15,6 +15,8 @@
     <string name="misc_summary">Diverse</string>
     <string name="fribruk_summary">Vis faktisk forbruk for FriBRUK/ubegrensede potter.</string>
     <string name="fribruk_title">Vis saldo for FriBRUK</string>
+    <string name="consumption_summary">Vis forbruk istedenfor gjenværende verdi.</string>
+    <string name="consumption_title">Vis forbruk</string>
     <string name="divider_content_description">Divider</string>
     <string name="server_down_err_msg">Ugyldig svar fra Chess-server. Server trolig nede for vedlikehold, prøv igjen senere!</string>
     <string name="credentials_missing">Brukernavn eller passord mangler.</string>
@@ -28,6 +30,7 @@
     <string name="fribruk_widget">FRI</string>
     <string name="saldo_missing_title">Saldo mangler</string>
     <string name="saldo_missing_desc">Vennligst oppdater saldo-informasjon minst en gang før du prøver å legge til widget på nytt.</string>
+
 
     <string-array name="update_freq_options">
         <item>15 minutter</item>

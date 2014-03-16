@@ -8,6 +8,7 @@
                             android:key="password" android:inputType="textPassword" android:singleLine="true" android:defaultValue=""/>
 	</PreferenceCategory>
     <PreferenceCategory android:title="@string/misc_summary">
+        <CheckBoxPreference android:summary="@string/consumption_summary" android:title="@string/consumption_title" android:key="show_consumption" android:defaultValue="false"/>
         <CheckBoxPreference android:summary="@string/fribruk_summary" android:title="@string/fribruk_title" android:key="show_fribruk" android:defaultValue="true"/>
     </PreferenceCategory>
 	<PreferenceCategory android:title="@string/refresh_time_category">

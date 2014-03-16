@@ -31,12 +31,13 @@ public abstract class WidgetProviders extends AppWidgetProvider {
 
                 if (saldo.hasPots()) {
                     boolean showFribruk = settings.showFribruk();
+                    boolean showConsumption = settings.showConsumption();
                     for (Saldo.Pot pot : saldo.getPots()) {
                         RemoteViews divider = new RemoteViews(context.getPackageName(), R.layout.widget_divider);
                         root.addView(R.id.pot_container, divider);
 
                         RemoteViews potView = new RemoteViews(context.getPackageName(), R.layout.widget_pot_item);
-                        setPot(context, potView, pot, showFribruk);
+                        setPot(context, potView, pot, showFribruk, showConsumption);
                         root.addView(R.id.pot_container, potView);
                     }
                 }
@@ -70,7 +71,7 @@ public abstract class WidgetProviders extends AppWidgetProvider {
                 } else {
                     Saldo.Pot pot = saldo.getPot(type);
                     if (pot != null) {
-                        setPot(context, rv, pot, settings.showFribruk());
+                        setPot(context, rv, pot, settings.showFribruk(), settings.showConsumption());
                     }
                 }
             }
@@ -95,13 +96,18 @@ public abstract class WidgetProviders extends AppWidgetProvider {
     }
 
     // Progress bar container is workaround for issue 11040 (https://code.google.com/p/android/issues/detail?id=11040)
-    private static void setPot(Context context, RemoteViews rv, Saldo.Pot pot, boolean showFribruk) {
+    private static void setPot(Context context, RemoteViews rv, Saldo.Pot pot, boolean showFribruk, boolean showConsumption) {
         if (pot.freeUsage && !showFribruk) {
             rv.setTextViewText(R.id.pot_value, context.getString(R.string.fribruk_widget));
             rv.setViewVisibility(R.id.pot_progress_container, View.GONE);
         } else {
-            rv.setTextViewText(R.id.pot_value, Integer.toString(pot.balance));
-            rv.setProgressBar(R.id.pot_progress, pot.total, pot.balance, false);
+            if (showConsumption) {
+                rv.setTextViewText(R.id.pot_value, Integer.toString(pot.total - pot.balance));
+                rv.setProgressBar(R.id.pot_progress, pot.total, pot.total - pot.balance, false);
+            } else {
+                rv.setTextViewText(R.id.pot_value, Integer.toString(pot.balance));
+                rv.setProgressBar(R.id.pot_progress, pot.total, pot.balance, false);
+            }
         }
         rv.setTextViewText(R.id.pot_unit, pot.unit);
     }

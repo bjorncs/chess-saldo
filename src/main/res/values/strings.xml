@@ -15,6 +15,8 @@
     <string name="misc_summary">Misc</string>
     <string name="fribruk_summary">Show actual consumption for FriBRUK/unlimited pots.</string>
     <string name="fribruk_title">Show FriBRUK consumption</string>
+    <string name="consumption_summary">Show consumed units instead of remaining units.</string>
+    <string name="consumption_title">Show consumption</string>
     <string name="divider_content_description">Divider</string>
     <string name="server_down_err_msg">Invalid reply from Chess server. Probably server maintenance, please try again later!</string>
     <string name="credentials_missing">Username or password missing.</string>

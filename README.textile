@@ -3,27 +3,9 @@ h1. Chess Saldo
 h2. Intro
 
 Chess Saldo is an Android app which presents saldo information for customers of the Norwegian mobile operator Chess.
-Works for fixed quota based plan like Chess Sjakk Matt. The app is available at "Google Play":https://play.google.com/store/apps/details?id=com.bcseime.android.chess.saldo2.
-
-The project uses the new build system for Android based on "Gradle":http://tools.android.com/tech-docs/new-build-system.
+Works for most paid and pre-paid plans. The app is available at "Google Play":https://play.google.com/store/apps/details?id=com.bcseime.android.chess.saldo2.
 
 !https://github.com/bjorncs/chess-saldo/raw/master/screenshots/main-small.png! !https://github.com/bjorncs/chess-saldo/raw/master/screenshots/widget-small.png! !https://github.com/bjorncs/chess-saldo/raw/master/screenshots/settings-small.png!
-
-h2. Dependencies
-
-You need to have the following tools/SDK installed:
-* Android SDK 4.3 (API 18)
-* Android Build-tools 18.0.1
-
-Local installation of Gradle 1.7 or newer is recommended. Use the bundled gradle wrapper script (@gradlew@) if no such installation is present.
-
-h2. Building
-
-Execute the following command to build the project:
-@./gradlew build@
-
-Execute the following command to install on connected device:
-@./gradlew installDebug@
 
 h2. Running the test cases
 
