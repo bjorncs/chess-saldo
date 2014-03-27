@@ -19,9 +19,13 @@ public class Saldo {
     }
 
     public int getUsageSaldoAsInt() {
-        String usage = getUsageSaldo();
-        if (usage.length() < 4) return -1;
-        return Math.round(Float.parseFloat(usage.substring(3).replace(",", ".")));
+        try {
+            String usage = getUsageSaldo();
+            if (usage.length() < 4) return -1;
+            return Math.round(Float.parseFloat(usage.substring(3).replace(",", ".")));
+        } catch (NumberFormatException e) {
+            return -1;
+        }
     }
 
     public boolean hasPots() {
