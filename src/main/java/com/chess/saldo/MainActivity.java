@@ -40,18 +40,24 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         IntentFilter filter = new IntentFilter(UpdateService.UPDATE_COMPLETE_ACTION);
         receiver = new UpdateCompleteBroadcastReceiver();
         registerReceiver(receiver, filter);
+        updateSaldo();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         updateUI();
     }
 
     @Override
-    public void onPause() {
+    protected void onStop() {
         unregisterReceiver(receiver);
-        super.onPause();
+        super.onStop();
     }
 
     @Override
@@ -71,13 +77,17 @@ public class MainActivity extends Activity {
                 return true;
 
             case R.id.update_item:
-                Intent intent = new Intent(this, UpdateService.class);
-                intent.putExtra(UpdateService.SHOW_TOAST, true);
-                startService(intent);
+                updateSaldo();
                 return true;
 
         }
         return false;
+    }
+
+    private void updateSaldo() {
+        Intent intent = new Intent(this, UpdateService.class);
+        intent.putExtra(UpdateService.SHOW_TOAST, true);
+        startService(intent);
     }
 
     private void showPreferenceActivity() {

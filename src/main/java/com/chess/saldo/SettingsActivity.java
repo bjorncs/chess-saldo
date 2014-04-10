@@ -1,6 +1,5 @@
 package com.chess.saldo;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
@@ -24,16 +23,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         switch (key) {
             case "widget.updatefreq":
                 ConnectivityBroadcastReceiver.setUpdateAlarm(getApplicationContext());
-                break;
-            case "username":
-            case "password":
-                String username = sharedPreferences.getString("username", "");
-                String password = sharedPreferences.getString("password", "");
-                if (username.length() > 0 && password.length() > 0) {
-                    Intent intent = new Intent(this, UpdateService.class);
-                    intent.putExtra(UpdateService.SHOW_TOAST, true);
-                    startService(intent);
-                }
                 break;
             case "show_fribruk":
             case "show_consumption":
