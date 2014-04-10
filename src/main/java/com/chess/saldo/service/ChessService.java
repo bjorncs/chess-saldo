@@ -50,7 +50,7 @@ public class ChessService {
     }
 
     private HttpGet createRequest() {
-        HttpGet httpGet = new HttpGet("https://217.68.103.239/mobile/mobile.asmx/GetUsageSaldo");
+        HttpGet httpGet = new HttpGet("https://minside.chess.no/mobile/mobile.asmx/GetUsageSaldo");
         httpGet.setHeader("username", username);
         httpGet.setHeader("User-Agent", "");
         httpGet.setHeader("password", password);
@@ -75,12 +75,9 @@ public class ChessService {
             KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
             trustStore.load(null, null);
 
-            SSLSocketFactory sf = new CarelessSSLSocketFactory(trustStore);
-            sf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-
             SchemeRegistry registry = new SchemeRegistry();
             registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-            registry.register(new Scheme("https", sf, 443));
+            registry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
 
             BasicHttpParams basicHttpParams = new BasicHttpParams();
             HttpConnectionParams.setConnectionTimeout(basicHttpParams, CONN_TIMEOUT);
