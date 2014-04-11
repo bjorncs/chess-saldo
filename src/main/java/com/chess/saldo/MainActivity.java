@@ -16,6 +16,8 @@ import android.widget.LinearLayout;
 
 import com.bcseime.android.chess.saldo2.R;
 import com.chess.saldo.service.Saldo;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import java.util.List;
 
@@ -34,18 +36,24 @@ public class MainActivity extends Activity {
         this.settings = new Settings(getApplicationContext());
         setContentView(R.layout.main_layout);
         ButterKnife.inject(this);
+
         if (!settings.isUserCredentialsSet()) {
             showPreferenceActivity();
         }
+        updateSaldo();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+
         IntentFilter filter = new IntentFilter(UpdateService.UPDATE_COMPLETE_ACTION);
         receiver = new UpdateCompleteBroadcastReceiver();
         registerReceiver(receiver, filter);
-        updateSaldo();
+
+        Tracker tracker = ChessApplication.getInstance().getAnalyticsTracker();
+        tracker.setScreenName("Main");
+        tracker.send(new HitBuilders.AppViewBuilder().setNewSession().build());
     }
 
     @Override

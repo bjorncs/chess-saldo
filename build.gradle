@@ -53,6 +53,7 @@ android {
 }
 
 dependencies {
-    compile 'com.jakewharton:butterknife:4.0.+'
-    compile 'ch.acra:acra:4.5.+'
+    compile 'com.jakewharton:butterknife:+'
+    compile 'ch.acra:acra:+'
+    compile 'com.google.android.gms:play-services:+'
 }

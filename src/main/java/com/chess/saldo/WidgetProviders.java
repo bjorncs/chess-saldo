@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.RemoteViews;
 import com.bcseime.android.chess.saldo2.R;
 import com.chess.saldo.service.Saldo;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import java.util.Arrays;
 
@@ -121,12 +123,15 @@ public abstract class WidgetProviders extends AppWidgetProvider {
             manager.updateAppWidget(appWidgetId, largeView);
         }
 
-
         int[] smallIds = manager.getAppWidgetIds(new ComponentName(context, Small.class));
         for (int appWidgetId : smallIds) {
             RemoteViews smallView = Small.updateWidgetView(context, appWidgetId);
             manager.updateAppWidget(appWidgetId, smallView);
         }
+
+        Tracker tracker = ChessApplication.getInstance().getAnalyticsTracker();
+        tracker.setScreenName("WidgetUpdate");
+        tracker.send(new HitBuilders.AppViewBuilder().setNewSession().build());
     }
 
     public static boolean hasWidgets(Context context) {
